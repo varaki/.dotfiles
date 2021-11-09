@@ -114,9 +114,3 @@ alias ll="ls -lah"
 alias tmux="TERM=screen-256color-bce tmux"
 alias vim="nvim"
 alias vimdiff="nvim -d"
-
-# Bitwarden CLI
-export BW_SESSION="GDjS5dFPpyA+8n0AXSAaBdx1+rCviswCRIRIfSopFpEMH+cNMJnPeA75sT5NVNKPJ63pzVX4Jyx+e0CdTEL/tQ=="
-
-# GPU accelerated qutebrowser
-alias qutebrowser="qutebrowser --qt-flag ignore-gpu-blocklist --qt-flag enable-gpu-rasterization --qt-flag enable-native-gpu-memory-buffers --qt-flag num-raster-threads=4"
