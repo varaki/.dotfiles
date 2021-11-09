@@ -1,0 +1,11 @@
+# Touchpad configuration
+input "2:14:ETPS/2_Elantech_Touchpad" {
+    dwt enabled
+    tap enabled
+    natural_scroll disabled
+    scroll_factor 0.3
+    middle_emulation disabled
+}
+
+# Keyboard layout
+input * xkb_layout hu

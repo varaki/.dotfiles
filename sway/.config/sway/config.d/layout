@@ -1,0 +1,20 @@
+# Container setup
+for_window [app_id="blueman-manager"] floating enable
+for_window [app_id="gnome-tweaks"] floating enable
+for_window [app_id="imv"] floating enable
+for_window [class="Lxappearance"] floating enable
+for_window [app_id="mpv"] floating enable
+for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="thunar"] floating enable
+for_window [app_id=".*zathura.*"] floating enable
+for_window [app_id="zenity"] floating enable
+
+# Always open firefox in workspace 2
+assign [class="firefox"] workspace 2
+# Move focus to workspace 2 if firefox is opened
+for_window [class="firefox"] workspace 2, focus
+
+# Always open qutebrowser in workspace 2
+assign [app_id=".*qutebrowser.*"] workspace 2
+# Move focus to workspace 2 if qutebrowser is opened
+for_window [app_id=".*qutebrowser.*"] workspace 2, focus

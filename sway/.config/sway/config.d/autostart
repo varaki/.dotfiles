@@ -1,0 +1,7 @@
+# Autostart applications
+
+workspace 1
+exec alacritty
+
+workspace 2
+exec firefox
