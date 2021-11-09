@@ -1,0 +1,7 @@
+[user]
+	email = varady.akos@gmail.com
+	name = varaki
+[credential]
+	helper = store
+[core]
+	editor = vim
