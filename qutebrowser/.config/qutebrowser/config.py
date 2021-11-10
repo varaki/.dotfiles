@@ -13,6 +13,13 @@
 # Change the argument to True to still load settings configured via autoconfig.yml
 config.load_autoconfig(False)
 
+# Additional arguments to pass to Qt, without leading `--`. With
+# QtWebEngine, some Chromium arguments (see
+# https://peter.sh/experiments/chromium-command-line-switches/ for a
+# list) will work.
+# Type: List of String
+c.qt.args = ['ignore-gpu-blocklist', 'enable-gpu-rasterization', 'enable-native-gpu-memory-buffers', 'num-raster-threads=4']
+
 # Automatically start playing `<video>` elements.
 # Type: Bool
 c.content.autoplay = False
