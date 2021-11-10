@@ -634,11 +634,11 @@ c.fonts.tabs.unselected = '9pt FreeSans'
 
 # Bindings for normal mode
 config.bind(',f', 'hint inputs')
+config.bind(',l', 'spawn --userscript qute-bitwarden')
 config.bind('<Alt+Left>', 'back')
 config.bind('<Alt+Right>', 'forward')
 config.bind('<Ctrl+PgDown>', 'tab-prev')
 config.bind('<Ctrl+PgUp>', 'tab-next')
 config.bind('J', 'tab-prev')
 config.bind('K', 'tab-next')
-config.bind('l', 'spawn --userscript qute-bitwarden')
 config.unbind('q')
