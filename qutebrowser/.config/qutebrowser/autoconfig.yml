@@ -6,15 +6,5 @@
 
 config_version: 2
 settings:
-  bindings.commands:
-    global:
-      normal:
-        ',f': hint inputs
-        <Alt+Left>: back
-        <Alt+Right>: forward
-        <Ctrl+PgDown>: tab-prev
-        <Ctrl+PgUp>: tab-next
-        J: tab-prev
-        K: tab-next
-        l: spawn --userscript qute-bitwarden
-        q: null
+  content.javascript.can_access_clipboard:
+    global: true
