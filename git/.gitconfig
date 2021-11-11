@@ -1,7 +1,13 @@
 [user]
-	email = varady.akos@gmail.com
-	name = varaki
+    email = varady.akos@gmail.com
+    name = varaki
 [credential]
-	helper = store
+    helper = store
 [core]
-	editor = vim
+    editor = nvim
+[alias]
+    co = checkout
+    br = branch
+    bra = branch -avv
+    ci = commit
+    st = status
