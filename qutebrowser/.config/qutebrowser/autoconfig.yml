@@ -6,5 +6,9 @@
 
 config_version: 2
 settings:
-  content.javascript.can_access_clipboard:
-    global: true
+  editor.command:
+    global:
+    - :nvim
+    - -c
+    - normal {line}G{column0}l
+    - '{file}'

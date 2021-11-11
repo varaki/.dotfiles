@@ -208,7 +208,11 @@ c.downloads.location.directory = '~/Downloads'
 # `{line0}`: Same as `{line}`, but starting from index 0. * `{column0}`:
 # Same as `{column}`, but starting from index 0.
 # Type: ShellCommand
-c.editor.command = ['vim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
+c.editor.command = ['nvim', '-c', 'normal {line}G{column0}l', '{file}']
+
+# Characters used for hint strings.
+# Type: UniqueCharString
+c.hints.chars = 'asdfqwejkl'
 
 # Page to open if :open -t/-b/-w is used without URL. Use `about:blank`
 # for a blank page.
