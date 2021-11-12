@@ -1,5 +1,6 @@
 # Container setup
 for_window [app_id="blueman-manager"] floating enable
+for_window [class="Gimp"] floating enable
 for_window [app_id="gnome-tweaks"] floating enable
 for_window [app_id="imv"] floating enable
 for_window [class="Lxappearance"] floating enable
@@ -18,3 +19,8 @@ for_window [class="firefox"] workspace 2, focus
 assign [app_id=".*qutebrowser.*"] workspace 2
 # Move focus to workspace 2 if qutebrowser is opened
 for_window [app_id=".*qutebrowser.*"] workspace 2, focus
+
+# Always open Gimp in workspace 3
+assign [class="Gimp"] workspace 3
+# Move focus to workspace 3 if Gimp is opened
+for_window [class="Gimp"] workspace 3, focus
