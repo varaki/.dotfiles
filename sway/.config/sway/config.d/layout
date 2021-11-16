@@ -1,3 +1,7 @@
+# Focus settings
+# Disable mouse cursor autofocus
+focus_follows_mouse no
+
 # Container setup
 for_window [app_id="blueman-manager"] floating enable
 for_window [class="Gimp"] floating enable
@@ -6,7 +10,7 @@ for_window [app_id="imv"] floating enable
 for_window [class="Lxappearance"] floating enable
 for_window [app_id="mpv"] floating enable
 for_window [app_id="pavucontrol"] floating enable
-for_window [app_id="thunar"] floating enable
+for_window [app_id="Thunar"] floating enable
 for_window [app_id=".*zathura.*"] floating enable
 for_window [app_id="zenity"] floating enable
 

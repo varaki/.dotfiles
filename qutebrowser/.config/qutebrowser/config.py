@@ -140,7 +140,7 @@ config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}) AppleWebKit/53
 #   - adblock: Use Brave's ABP-style adblocker
 #   - hosts: Use hosts blocking
 #   - both: Use both hosts blocking and Brave's ABP-style adblocker
-c.content.blocking.method = 'both'
+c.content.blocking.method = 'adblock'
 
 # List of URLs to ABP-style adblocking rulesets.  Only used when Brave's
 # ABP-style adblocker is used (see `content.blocking.method`).  You can

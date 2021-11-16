@@ -6,9 +6,5 @@
 
 config_version: 2
 settings:
-  editor.command:
-    global:
-    - :nvim
-    - -c
-    - normal {line}G{column0}l
-    - '{file}'
+  fonts.default_size:
+    global: 10pt
