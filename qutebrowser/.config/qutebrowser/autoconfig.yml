@@ -6,5 +6,5 @@
 
 config_version: 2
 settings:
-  fonts.default_size:
-    global: 10pt
+  content.geolocation:
+    https://www.origo.hu: false

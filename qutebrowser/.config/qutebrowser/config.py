@@ -153,6 +153,17 @@ c.content.blocking.method = 'adblock'
 # Type: List of Url
 c.content.blocking.adblock.lists = ['https://easylist.to/easylist/easylist.txt', 'https://easylist.to/easylist/easyprivacy.txt', 'https://secure.fanboy.co.nz/fanboy-cookiemonster.txt', 'https://secure.fanboy.co.nz/fanboy-annoyance.txt', 'https://raw.githubusercontent.com/hufilter/hufilter/master/hufilter-ublock.txt']
 
+# A list of patterns that should always be loaded, despite being blocked
+# by the ad-/host-blocker. Local domains are always exempt from
+# adblocking. Note this whitelists otherwise blocked requests, not
+# first-party URLs. As an example, if `example.org` loads an ad from
+# `ads.example.org`, the whitelist entry could be
+# `https://ads.example.org/*`. If you want to disable the adblocker on a
+# given page, use the `content.blocking.enabled` setting with a URL
+# pattern instead.
+# Type: List of UrlPattern
+c.content.blocking.whitelist = ['https://*.twitter.com/*', 'https://twitter.com/*', 'https://*.facebook.com/*', 'https://www.facebook.com/*']
+
 # Load images automatically in web pages.
 # Type: Bool
 config.set('content.images', True, 'chrome-devtools://*')
@@ -213,6 +224,11 @@ c.editor.command = ['nvim', '-c', 'normal {line}G{column0}l', '{file}']
 # Characters used for hint strings.
 # Type: UniqueCharString
 c.hints.chars = 'asdfqwejkl'
+
+# Enable smooth scrolling for web pages. Note smooth scrolling does not
+# work with the `:scroll-px` command.
+# Type: Bool
+c.scrolling.smooth = False
 
 # Page to open if :open -t/-b/-w is used without URL. Use `about:blank`
 # for a blank page.
@@ -628,6 +644,12 @@ c.colors.webpage.darkmode.enabled = False
 #   - brightness-rgb: Modify colors by subtracting each of r, g, and b from their maximum value.
 c.colors.webpage.darkmode.algorithm = 'lightness-cielab'
 
+# Default font families to use. Whenever "default_family" is used in a
+# font setting, it's replaced with the fonts listed here. If set to an
+# empty value, a system-specific monospace default is used.
+# Type: List of Font, or Font
+c.fonts.default_family = 'FreeSans'
+
 # Font used for selected tabs.
 # Type: Font
 c.fonts.tabs.selected = '9pt FreeSans'
@@ -636,6 +658,10 @@ c.fonts.tabs.selected = '9pt FreeSans'
 # Type: Font
 c.fonts.tabs.unselected = '9pt FreeSans'
 
+# Font family for serif fonts.
+# Type: FontFamily
+c.fonts.web.family.serif = None
+
 # Bindings for normal mode
 config.bind(',f', 'hint inputs')
 config.bind(',l', 'spawn --userscript qute-bitwarden')
@@ -643,6 +669,9 @@ config.bind('<Alt+Left>', 'back')
 config.bind('<Alt+Right>', 'forward')
 config.bind('<Ctrl+PgDown>', 'tab-prev')
 config.bind('<Ctrl+PgUp>', 'tab-next')
+config.bind('F', 'hint all tab-fg')
 config.bind('J', 'tab-prev')
 config.bind('K', 'tab-next')
+config.unbind('gf')
+config.bind('gs', 'view-source')
 config.unbind('q')
