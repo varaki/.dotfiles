@@ -6,5 +6,17 @@
 
 config_version: 2
 settings:
-  content.geolocation:
-    https://www.origo.hu: false
+  fonts.web.family.cursive:
+    global: null
+  fonts.web.family.fantasy:
+    global: null
+  fonts.web.family.fixed:
+    global: JetBrainsMono Nerd Font
+  fonts.web.family.sans_serif:
+    global: null
+  fonts.web.family.serif:
+    global: null
+  fonts.web.family.standard:
+    global: null
+  fonts.web.size.minimum:
+    global: 10

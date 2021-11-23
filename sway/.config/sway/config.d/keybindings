@@ -138,5 +138,7 @@ bindsym $mod+l exec swaylock \
     --line-color 00000000 \
     --inside-color 00000088 \
     --separator-color 00000000 \
+    --inside-ver-color d79921 \
+    --ring-ver-color d79921 \
     --grace 0 \
     --fade-in 0.2
