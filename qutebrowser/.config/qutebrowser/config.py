@@ -658,9 +658,26 @@ c.fonts.tabs.selected = '9pt FreeSans'
 # Type: Font
 c.fonts.tabs.unselected = '9pt FreeSans'
 
+# Font family for fixed fonts.
+# Type: FontFamily
+c.fonts.web.family.fixed = 'JetBrainsMono Nerd Font'
+
 # Font family for serif fonts.
 # Type: FontFamily
 c.fonts.web.family.serif = None
+
+# Font family for sans-serif fonts.
+# Type: FontFamily
+c.fonts.web.family.sans_serif = 'Roboto'
+
+# Hard minimum font size (in pixels).
+# Type: Int
+c.fonts.web.size.minimum = 0
+
+# Minimum logical font size (in pixels) that is applied when zooming
+# out.
+# Type: Int
+c.fonts.web.size.minimum_logical = 6
 
 # Bindings for normal mode
 config.bind(',f', 'hint inputs')
