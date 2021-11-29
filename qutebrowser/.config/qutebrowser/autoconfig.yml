@@ -6,11 +6,5 @@
 
 config_version: 2
 settings:
-  fonts.web.family.fixed:
-    global: JetBrainsMono Nerd Font
-  fonts.web.family.sans_serif:
-    global: Roboto
-  fonts.web.size.minimum:
-    global: 0
-  fonts.web.size.minimum_logical:
-    global: 6
+  tabs.select_on_remove:
+    global: prev
