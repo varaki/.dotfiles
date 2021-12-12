@@ -34,6 +34,12 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 # Start Qutebrowser
 bindsym $mod+w exec qutebrowser
 
+# Screenshot (selected region)
+bindsym $mod+Print exec grim -g "$(slurp)" ~/Screenshots/$(date +'%Y%m%d_%Hh%Mm%Ss')_grim.png
+
+# Screenshot (full screen)
+bindsym Print exec grim ~/Screenshots/$(date +'%Y%m%d_%Hh%Mm%Ss')_grim.png
+
 # Move focus
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
