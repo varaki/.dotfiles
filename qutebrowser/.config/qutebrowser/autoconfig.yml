@@ -6,5 +6,9 @@
 
 config_version: 2
 settings:
-  tabs.select_on_remove:
-    global: prev
+  fonts.web.family.sans_serif:
+    global: FreeSans
+  fonts.web.family.serif:
+    global: FreeSans
+  fonts.web.family.standard:
+    global: FreeSans

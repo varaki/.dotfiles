@@ -666,17 +666,21 @@ c.fonts.tabs.selected = '9pt FreeSans'
 # Type: Font
 c.fonts.tabs.unselected = '9pt FreeSans'
 
+# Font family for standard fonts.
+# Type: FontFamily
+c.fonts.web.family.standard = 'FreeSans'
+
 # Font family for fixed fonts.
 # Type: FontFamily
 c.fonts.web.family.fixed = 'JetBrainsMono Nerd Font'
 
 # Font family for serif fonts.
 # Type: FontFamily
-c.fonts.web.family.serif = None
+c.fonts.web.family.serif = 'FreeSans'
 
 # Font family for sans-serif fonts.
 # Type: FontFamily
-c.fonts.web.family.sans_serif = 'Roboto'
+c.fonts.web.family.sans_serif = 'FreeSans'
 
 # Hard minimum font size (in pixels).
 # Type: Int
