@@ -35,10 +35,14 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 bindsym $mod+w exec qutebrowser
 
 # Screenshot (selected region)
-bindsym $mod+Print exec grim -g "$(slurp)" ~/Screenshots/$(date +'%Y%m%d_%Hh%Mm%Ss')_grim.png
-
+bindsym $mod+Print exec ~/.bin/screenshot.sh --partial
 # Screenshot (full screen)
-bindsym Print exec grim ~/Screenshots/$(date +'%Y%m%d_%Hh%Mm%Ss')_grim.png
+bindsym Print exec ~/.bin/screenshot.sh
+
+# Screenrecord start
+bindsym $mod+Shift+r exec ~/.bin/screenrecord.sh
+# Screenrecord stop
+bindsym $mod+Shift+s exec kill -s INT $(pidof wf-recorder)
 
 # Move focus
 bindsym $mod+Left focus left

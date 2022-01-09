@@ -31,11 +31,32 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-eunuch'
+Plug 'neovim/nvim-lspconfig'
 
 call plug#end()
 " ----------------------------------------------------------------------------
 " Plugins list #end
 " ----------------------------------------------------------------------------
+
+
+" ----------------------------------------------------------------------------
+" LSP config #start
+" ----------------------------------------------------------------------------
+lua << EOF
+local nvim_lsp = require('lspconfig')
+local protocol = require('vim.lsp.protocol')
+
+nvim_lsp.gopls.setup {
+    on_attach = on_attach,
+    cmd = {"gopls", "--remote=auto"},
+    filetypes = {"go", "gomod"},
+}
+EOF
+
+" ----------------------------------------------------------------------------
+" LSP config #end
+" ----------------------------------------------------------------------------
+
 
 " -----------------------------------------------------------------------------
 " Main editor settings #start
@@ -65,6 +86,7 @@ set splitbelow                    " Open splits below current one
 set splitright                    " Open splits right from the current one
 set backspace=indent,eol,start    " Backspace behaviour
 let mapleader=","                 " Leader key
+set clipboard+=unnamedplus        " Use system clipboard
 
 " Resize split windows with mouse
 if has('mouse')
@@ -127,9 +149,6 @@ nnoremap <C-Right> :tabnext<CR>
 nnoremap <silent> <A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 
-" Clipboard settings
-vmap <C-c> :w !xclip -selection clipboard<CR><CR>
-
 " -----------------------------------------------------------------------------
 " Main editor settings #end
 " -----------------------------------------------------------------------------
@@ -170,7 +189,7 @@ let g:strip_whitespace_confirm=0
 
 " vim-mergetool config
 let g:mergetool_layout = 'mr'
-"let g:mergetool_prefer_revision = 'local'
+let g:mergetool_prefer_revision = 'local'
 "let g:mergetool_prefer_revision = 'remote'
 
 " fzf config
