@@ -693,7 +693,7 @@ c.fonts.web.size.minimum_logical = 6
 
 # Bindings for normal mode
 config.bind(',f', 'hint inputs')
-config.bind(',l', 'spawn --userscript qute-bitwarden')
+config.bind(',l', 'spawn --userscript qute-bitwarden -p "rofi -dmenu -theme-str \'window {width: 45%; height: 25px;}\' -l 0 -p \'Bitwarden Master Password\' -password"')
 config.bind('<Alt+Left>', 'back')
 config.bind('<Alt+Right>', 'forward')
 config.bind('<Ctrl+PgDown>', 'tab-prev')

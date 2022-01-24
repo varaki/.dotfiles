@@ -10,3 +10,5 @@ settings:
     https://www.messenger.com: true
   content.media.audio_video_capture:
     https://www.messenger.com: true
+  content.media.video_capture:
+    https://www.messenger.com: true
