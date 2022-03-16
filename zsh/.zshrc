@@ -3,7 +3,11 @@ clear
 pfetch
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/.local/bin:/usr/local/bin:$HOME/.cargo/bin/:$PATH
+export PATH=$HOME/.local/bin:/usr/local/bin:$HOME/.cargo/bin/:$HOME/go/bin:$PATH
+
+# Golang
+export GOPATH=$HOME/go
+export GOROOT=/usr/lib/go
 
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
@@ -116,7 +120,4 @@ alias vim="nvim"
 alias vimdiff="nvim -d"
 
 # Bitwarden CLI
-export BW_SESSION="GDjS5dFPpyA+8n0AXSAaBdx1+rCviswCRIRIfSopFpEMH+cNMJnPeA75sT5NVNKPJ63pzVX4Jyx+e0CdTEL/tQ=="
-
-# GPU accelerated qutebrowser
-alias qutebrowser="qutebrowser --qt-flag ignore-gpu-blocklist --qt-flag enable-gpu-rasterization --qt-flag enable-native-gpu-memory-buffers --qt-flag num-raster-threads=4"
+export BW_SESSION="4I7VnnBiIFD34cDn5yIWGMP7lqpPpZSIUZkTQ8tuB4RVDe5HtuM75oqpxAv6n0zagff/EslC2MgFIrZ0IlK0Rw=="

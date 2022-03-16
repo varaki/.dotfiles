@@ -6,9 +6,5 @@
 
 config_version: 2
 settings:
-  content.media.audio_capture:
-    https://www.messenger.com: true
-  content.media.audio_video_capture:
-    https://www.messenger.com: true
-  content.media.video_capture:
-    https://www.messenger.com: true
+  content.geolocation:
+    https://duckduckgo.com: true
