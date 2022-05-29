@@ -121,3 +121,6 @@ alias vimdiff="nvim -d"
 
 # Bitwarden CLI
 export BW_SESSION="4I7VnnBiIFD34cDn5yIWGMP7lqpPpZSIUZkTQ8tuB4RVDe5HtuM75oqpxAv6n0zagff/EslC2MgFIrZ0IlK0Rw=="
+
+# Editor
+export EDITOR="nvim"

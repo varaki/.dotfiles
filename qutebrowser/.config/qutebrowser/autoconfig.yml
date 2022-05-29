@@ -6,5 +6,5 @@
 
 config_version: 2
 settings:
-  content.geolocation:
-    https://duckduckgo.com: true
+  downloads.prevent_mixed_content:
+    global: false

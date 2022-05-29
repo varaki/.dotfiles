@@ -652,6 +652,12 @@ c.colors.webpage.darkmode.enabled = False
 #   - brightness-rgb: Modify colors by subtracting each of r, g, and b from their maximum value.
 c.colors.webpage.darkmode.algorithm = 'lightness-cielab'
 
+# Render all colors as grayscale. This only has an effect when
+# `colors.webpage.darkmode.algorithm` is set to `lightness-hsl` or
+# `brightness-rgb`.
+# Type: Bool
+c.colors.webpage.darkmode.grayscale.all = False
+
 # Default font families to use. Whenever "default_family" is used in a
 # font setting, it's replaced with the fonts listed here. If set to an
 # empty value, a system-specific monospace default is used.
@@ -693,7 +699,7 @@ c.fonts.web.size.minimum_logical = 6
 
 # Bindings for normal mode
 config.bind(',f', 'hint inputs')
-config.bind(',l', 'spawn --userscript qute-bitwarden -p "rofi -dmenu -theme-str \'window {width: 45%; height: 25px;}\' -l 0 -p \'Bitwarden Master Password\' -password"')
+config.bind(',l', 'spawn --userscript qute-pass --username-target secret --username-pattern "login: (.+)"')
 config.bind('<Alt+Left>', 'back')
 config.bind('<Alt+Right>', 'forward')
 config.bind('<Ctrl+PgDown>', 'tab-prev')

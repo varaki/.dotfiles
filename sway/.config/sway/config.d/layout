@@ -14,6 +14,7 @@ for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="thunar"] floating enable
 for_window [app_id=".*zathura.*"] floating enable
 for_window [app_id="zenity"] floating enable
+for_window [class="vlc"] floating enable
 
 # Always open firefox in workspace 2
 assign [class="firefox"] workspace 2
