@@ -1,0 +1,45 @@
+# Focus settings
+# Disable mouse cursor autofocus
+focus_follows_mouse no
+
+# Container setup
+for_window [app_id=".*easyeffects*"] floating enable
+for_window [app_id=".*zathura.*"] floating enable
+for_window [app_id="blueman-manager"] floating enable
+for_window [app_id="gnome-tweaks"] floating enable
+for_window [app_id="imv"] floating enable
+for_window [app_id="mpv"] floating enable
+for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="zenity"] floating enable
+for_window [class="Gimp"] floating enable
+for_window [class="Lxappearance"] floating enable
+for_window [class="vlc"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
+# Always open librewolf in workspace 2
+assign [app_id="LibreWolf"] workspace 2
+# Move focus to workspace 2 if librewolf is opened
+for_window [app_id="LibreWolf"] workspace 2, focus
+
+# Always open qutebrowser in workspace 2
+assign [app_id=".*qutebrowser.*"] workspace 2
+# Move focus to workspace 2 if qutebrowser is opened
+for_window [app_id=".*qutebrowser.*"] workspace 2, focus
+
+# Always open Gimp in workspace 3
+assign [class="Gimp"] workspace 3
+# Move focus to workspace 3 if Gimp is opened
+for_window [class="Gimp"] workspace 3, focus
+
+# Always open thunar in workspace 3
+assign [app_id="thunar"] workspace 3
+# Move focus to workspace 3 if thunar is opened
+for_window [app_id="thunar"] workspace 3, focus
+
+# Always open Spotify in workspace 4
+assign [class="Spotify"] workspace 4
+# Move focus to workspace 4 if Spotify is opened
+# In case of Spotify "move container" has to be used
+for_window [class="Spotify"] move container to workspace 4
+for_window [class="Spotify"] workspace 4, focus

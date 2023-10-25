@@ -1,0 +1,30 @@
+[user]
+    email = varady.akos@gmail.com
+    name = varaki
+[credential]
+    helper = store
+[core]
+    editor = nvim
+[alias]
+    co = checkout
+    br = branch
+    bra = branch -avv
+    ci = commit
+    st = status
+    lg = log --graph --date=format:'%Y-%m-%d %H:%M' --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit
+    stal = stash list
+    stap = stash pop
+[pager]
+    grep = false
+    branch = false
+[diff]
+    tool = nvim -d
+    colorMoved = zebra
+[merge]
+    tool = vim_mergetool
+    conflictstyle = diff3
+[mergetool "vim_mergetool"]
+    cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+    trustExitCode = true
+[init]
+    defaultBranch = main

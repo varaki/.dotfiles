@@ -1,0 +1,50 @@
+#!/bin/bash
+
+STORED_FILE="/tmp/kbd_backlight_stored"
+
+idle() {
+    local curr=$(brightnessctl --quiet -c "leds" -d "tpacpi::kbd_backlight" get)
+    echo $curr > $STORED_FILE 2>/dev/null
+    brightnessctl --quiet -c "leds" -d "tpacpi::kbd_backlight" set 0
+}
+
+wakeup() {
+    local stored=$(cat $STORED_FILE 2>/dev/null)
+    stored=${stored:-1}
+    brightnessctl --quiet -c "leds" -d "tpacpi::kbd_backlight" set "${stored}"
+}
+
+toggle() {
+    local curr=$(brightnessctl --quiet -c "leds" -d "tpacpi::kbd_backlight" get)
+    case $curr in
+        "0")
+            val=1
+            ;;
+        "1")
+            val=$(($curr + 1))
+            ;;
+        "2")
+            val=0
+            ;;
+    esac
+    brightnessctl --quiet -c "leds" -d "tpacpi::kbd_backlight" set "$val"
+    echo $val > $STORED_FILE 2> /dev/null
+}
+
+while [ "$#" -gt 0 ]; do
+    case $1 in
+        "--idle")
+            idle
+            break
+            ;;
+        "--wakeup")
+            wakeup
+            break
+            ;;
+        "--toggle")
+            toggle
+            break
+            ;;
+    esac
+    shift
+done

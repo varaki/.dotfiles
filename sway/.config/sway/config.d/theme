@@ -1,0 +1,29 @@
+# Container style
+default_border pixel 2
+default_floating_border pixel 2
+gaps inner 2
+gaps outer 2
+
+# Gruvbox normal colors
+set $black #000000
+set $darkgray #282828
+set $red #cc241d
+set $green #98971a
+set $yellow #d79921
+set $blue #458588
+set $magenta #b16286
+set $cyan #689d6a
+set $white #a89984
+
+# class                 border      backgr      text        indicator       child_border
+client.focused          $green      $green      $black      $yellow         $yellow
+client.focused_inactive $black      $black      $yellow     $black          $black
+client.unfocused        $black      $black      $yellow     $black          $black
+client.urgent           $red        $red        $white      $red            $red
+
+# GTK Theme
+set $gnome-schema org.gnome.desktop.interface
+exec_always {
+    gsettings set $gnome-schema gtk-theme 'Pop-dark'
+    gsettings set $gnome-schema icon-theme 'Gruvbox-Material-Dark'
+}

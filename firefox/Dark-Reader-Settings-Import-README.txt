@@ -1,0 +1,1 @@
+Devtools > Preview new design > Right click on Dark Reader addon menu > View Page Source > Remove "view-source:" part from "view-source:moz-extension://488da1f1-bc8e-4c1a-b149-622f3cda6dd6/ui/popup/index.html"

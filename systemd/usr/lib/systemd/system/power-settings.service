@@ -1,0 +1,11 @@
+[Unit]
+Description=Power settings recommended by powertop
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/power-settings
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical.target

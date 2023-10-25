@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+echo "VM writeback timeout"
+echo "1500" > /proc/sys/vm/dirty_writeback_centisecs
+
+echo "NMI watchdog should be turned off"
+echo "0" > /proc/sys/kernel/nmi_watchdog
+
+echo "Autosuspend for USB device USB3.0-CRW [Generic]"
+echo "auto" > /sys/bus/usb/devices/2-3/power/control
+
+echo "Runtime PM for PCI Device Intel Corporation Sunrise Point-LP PCI Express Root Port #1"
+echo "auto" > /sys/bus/pci/devices/0000:00:1c.0/power/control
+
+echo "Runtime PM for PCI Device Intel Corporation Sunrise Point LPC Controller/eSPI Controller"
+echo "auto" > /sys/bus/pci/devices/0000:00:1f.0/power/control
+
+echo "Runtime PM for PCI Device Intel Corporation Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers"
+echo "auto" > /sys/bus/pci/devices/0000:00:00.0/power/control
+
+echo "Runtime PM for PCI Device Intel Corporation Sunrise Point-LP PCI Express Root Port #9"
+echo "auto" > /sys/bus/pci/devices/0000:00:1d.0/power/control
+
+echo "Runtime PM for PCI Device Intel Corporation Ethernet Connection (4) I219-LM"
+echo "auto" > /sys/bus/pci/devices/0000:00:1f.6/power/control
+
+echo "Runtime PM for PCI Device Intel Corporation Wireless 8265 / 8275"
+echo "auto" > /sys/bus/pci/devices/0000:04:00.0/power/control
+
+echo "Runtime PM for PCI Device Lenovo Device 0003"
+echo "auto" > /sys/bus/pci/devices/0000:3e:00.0/power/control

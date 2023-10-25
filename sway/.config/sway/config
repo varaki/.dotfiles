@@ -1,0 +1,53 @@
+# Set mod button
+set $mod Mod4
+
+# Your preferred terminal emulator
+set $term alacritty
+
+# Application launcher
+set $menu exec j4-dmenu-desktop --term="$term" --use-xdg-de --no-generic --display-binary --dmenu='bemenu -i -p "Applications" -H 26 --fn "Jetbrains Mono Nerd Font 11" --tf "#a89984" --tb "#282828" --fb "#282828" --nb "#282828" --hb "#fabd2f" --hf "#282828" --ff "#ebdbb2"'
+# set $menu exec wofi --show=drun --gtk-dark --allow-images
+
+# Default wallpaper
+set $wallpaper /home/varaki/Wallpapers/rocket-bike-1920×1080.jpg
+output * background $wallpaper fill
+# Set (fractional) scaling
+# output eDP-1 scale 1.10
+# Additional monitor setup example:
+# output HDMI-A-1 resolution 1920x1080 position 1920,0
+
+# X backward compatibility
+xwayland enable
+
+# Inputs config
+include ~/.config/sway/config.d/inputs
+
+# Keybindings
+include ~/.config/sway/config.d/keybindings
+
+# Theme config
+include ~/.config/sway/config.d/theme
+
+# Layout config
+include ~/.config/sway/config.d/layout
+
+# Autostart
+include ~/.config/sway/config.d/autostart
+
+# Systemd user service
+include ~/.config/sway/config.d/systemd-user
+
+# Idle configuration
+# Turns off keyboard backlight after 15 seconds of inactivity
+exec swayidle -w timeout 15 '${HOME}/.config/sway/scripts/keyboard-backlight --idle' resume '${HOME}/.config/sway/scripts/keyboard-backlight --wakeup' timeout 30 'if pgrep -x swaylock; then swaymsg "output * dpms off"; fi' resume 'swaymsg "output * dpms on"'
+
+# Waybar
+bar {
+    swaybar_command waybar
+}
+
+# Clipboard manager
+exec wl-paste -t text --watch clipman store
+
+# Include external configs
+include /etc/sway/config.d/*

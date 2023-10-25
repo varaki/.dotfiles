@@ -1,0 +1,9 @@
+[Unit]
+Description=Display colour temperature adjustment
+
+[Service]
+ExecStart=/usr/bin/gammastep
+Restart=on-failure
+
+[Install]
+WantedBy=sway-session.target

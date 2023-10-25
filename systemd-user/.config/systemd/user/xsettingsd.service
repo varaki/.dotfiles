@@ -1,0 +1,9 @@
+[Unit]
+Description=Xsettingsd service for XWayland apps
+
+[Service]
+ExecStart=/usr/bin/xsettingsd
+Restart=on-failure
+
+[Install]
+WantedBy=sway-session.target

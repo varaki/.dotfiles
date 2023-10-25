@@ -1,0 +1,2 @@
+# Run blueman-applet
+exec_always /usr/bin/blueman-applet

@@ -1,0 +1,9 @@
+[Unit]
+Description=Automount USB devices
+
+[Service]
+ExecStart=/usr/bin/udiskie --automount --file-manager /usr/bin/ranger --smart-tray
+Restart=on-failure
+
+[Install]
+WantedBy=sway-session.target

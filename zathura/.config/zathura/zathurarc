@@ -1,0 +1,30 @@
+# Window config
+set adjust-open width
+set window-width 1920
+set window-height 1080
+
+# Theme and fonts
+set font "JetBrainsMono Nerd Font 12"
+set default-bg "#282828"
+set default-fg "#ebdbb2"
+set inputbar-bg "#282828"
+set inputbar-fg "#ebdbb2"
+set statusbar-bg "#282828"
+set statusbar-fg "#ebdbb2"
+
+# Dark theme definitions
+unmap <C-r>
+map D recolor
+set recolor-darkcolor "#dcdccc"
+set recolor-lightcolor "#1f1f1f"
+
+# Stop at page boundaries
+set scroll-page-aware "true"
+set scroll-full-overlap 0.01
+set scroll-step 100
+
+# Enable clipboard
+set selection-clipboard clipboard
+
+# Disable sandbox
+set sandbox none

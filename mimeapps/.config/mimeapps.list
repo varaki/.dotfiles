@@ -1,0 +1,11 @@
+
+[Default Applications]
+application/pdf=org.pwmt.zathura.desktop
+image/bmp=imv-folder.desktop
+image/gif=imv-folder.desktop
+image/jp2=imv-folder.desktop
+image/jpeg=imv-folder.desktop
+image/jpg=imv-folder.desktop
+image/png=imv-folder.desktop
+image/webp=imv-folder.desktop
+image/x-webp=imv-folder.desktop
