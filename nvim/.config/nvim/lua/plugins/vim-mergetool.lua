@@ -1,0 +1,3 @@
+return {
+    'samoshkin/vim-mergetool',
+}
