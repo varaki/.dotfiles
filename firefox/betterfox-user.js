@@ -191,7 +191,7 @@ user_pref("browser.newtabpage.activity-stream.telemetry", false);
  * SECTION: PESKYFOX                                                        *
 ****************************************************************************/
 /** MOZILLA UI ***/
-user_pref("layout.css.prefers-color-scheme.content-override", 2);
+user_pref("layout.css.prefers-color-scheme.content-override", 0);
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 user_pref("app.update.suppressPrompts", true);
 user_pref("browser.compactmode.show", true);
@@ -291,6 +291,13 @@ user_pref("network.protocol-handler.external.mailto", false);
 
 // Enable using search bar in Firefox Home
 user_pref("browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar", false);
+
+// Clear history on exit
+user_pref("privacy.clearOnShutdown.cache", true);
+user_pref("privacy.clearOnShutdown.cookies", true);
+user_pref("privacy.clearOnShutdown.downloads", true);
+user_pref("privacy.clearOnShutdown.history", true);
+user_pref("privacy.clearOnShutdown.sessions", true);
 
 /****************************************************************************
  * END: BETTERFOX                                                           *
