@@ -193,5 +193,4 @@ esac
 ${work_env} && [ -e ${HOME}/.zshrc-work ] && source ${HOME}/.zshrc-work
 
 # Run pfetch
-clear
 pfetch
