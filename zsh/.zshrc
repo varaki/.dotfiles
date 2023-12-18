@@ -89,8 +89,6 @@ if ! zgenom saved; then
     zgenom ohmyzsh plugins/sudo
     zgenom load zsh-users/zsh-autosuggestions
     zgenom load zsh-users/zsh-syntax-highlighting
-    zgenom docker
-    zgenom docker-compose
 
     # save all to init script
     zgenom save
