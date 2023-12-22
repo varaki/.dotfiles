@@ -1,6 +1,6 @@
 {
-  "timeStamp": 1691589726378,
-  "version": "1.51.0",
+  "timeStamp": 1703239491402,
+  "version": "1.54.0",
   "userSettings": {
     "uiAccentCustom": true,
     "uiAccentCustom0": "#fcaf3e",
@@ -20,6 +20,8 @@
     "urlhaus-1",
     "plowe-0",
     "adguard-popup-overlays",
+    "adguard-cookies",
+    "ublock-cookies-adguard",
     "ublock-annoyances",
     "HUN-0"
   ],
