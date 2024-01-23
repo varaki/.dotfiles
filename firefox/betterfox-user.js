@@ -259,6 +259,7 @@ user_pref("cookiebanners.service.mode.privateBrowsing", 1);
 user_pref("permissions.default.xr", 2);
 // Autoplay
 user_pref("media.autoplay.default", 5);
+user_pref("media.autoplay.allow-extension-background-pages", false);
 
 // Enable hardware acceleration
 user_pref("browser.preferences.defaultPerformanceSettings.enabled", false);
