@@ -299,6 +299,7 @@ user_pref("privacy.clearOnShutdown.cookies", true);
 user_pref("privacy.clearOnShutdown.downloads", true);
 user_pref("privacy.clearOnShutdown.history", true);
 user_pref("privacy.clearOnShutdown.sessions", true);
+user_pref("privacy.clearOnShutdown.offlineApps", true);
 
 /****************************************************************************
  * END: BETTERFOX                                                           *
