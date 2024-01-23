@@ -207,6 +207,7 @@ user_pref("browser.aboutwelcome.enabled", false);
 user_pref("findbar.highlightAll", true);
 user_pref("middlemouse.contentLoadURL", false);
 user_pref("browser.privatebrowsing.enable-new-indicator", false);
+user_pref("browser.uidensity", 1);
 
 /** FULLSCREEN ***/
 user_pref("full-screen-api.transition-duration.enter", "0 0");
