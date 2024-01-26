@@ -1,3 +1,3 @@
 return {
-    'samoshkin/vim-mergetool',
+  "samoshkin/vim-mergetool",
 }
