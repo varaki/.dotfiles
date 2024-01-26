@@ -63,7 +63,13 @@ return {
       marksman = {},
 
       -- python
-      pyright = {},
+      pyright = {
+        python = {
+          analysis = {
+            typeCheckingMode = "off",
+          },
+        },
+      },
 
       -- toml
       taplo = {},
