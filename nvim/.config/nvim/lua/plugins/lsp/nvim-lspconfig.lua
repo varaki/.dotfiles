@@ -56,6 +56,8 @@ return {
             },
           },
           telemetry = { enable = false },
+          -- let stylua with null-ls do the formatting
+          format = { enable = false },
         },
       },
 
