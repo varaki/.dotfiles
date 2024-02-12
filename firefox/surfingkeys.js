@@ -1,8 +1,8 @@
 /* Gruvbox dark theme */
 settings.theme = `
 .sk_theme {
-    font-family: Input Sans Condensed, Charcoal, sans-serif;
-    font-size: 12pt;
+    font-family: JetBrainsMono Nerd Font;
+    font-size: 10pt;
     background: #282828;
     color: #ebdbb2;
 }
