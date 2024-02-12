@@ -80,9 +80,13 @@ api.unmap('e');
 // Tabs
 settings.focusAfterClosed = "left";
 settings.tabsMRUOrder = false;
-api.map('d', 'x'); 
+settings.tabsThreshold = 0;
+api.mapkey('T', 'Choose a tab with omnibar', function() {
+    api.Front.openOmnibar({type: "Tabs"});
+});
+api.map('d', 'x');
 api.unmap('x');
-api.map('u', 'X'); 
+api.map('u', 'X');
 api.unmap('X');
 api.map('gC', 'yt');
 api.unmap('yt');
