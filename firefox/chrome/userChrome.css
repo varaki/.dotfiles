@@ -15,15 +15,15 @@
 /* --- GENERAL DEBLOAT ---------------------------------- */
 
 /* Bottom left page loading status or url preview */
-#statuspanel {
-    display: none !important;
-}
+/* #statuspanel { */
+/*     display: none !important; */
+/* } */
 
 /* --- DEBLOAT NAVBAR ----------------------------------- */
 
-#unified-extensions-button {
-    display: none;
-}
+/* #unified-extensions-button { */
+/*     display: none; */
+/* } */
 
 #back-button {
     display: none;
@@ -145,6 +145,10 @@
 /* #identity-box { */
 /*     display: none; */
 /* } */
+
+#pageAction-urlbar-_testpilot-containers {
+    display: none;
+}
 
 #pageActionButton {
     display: none;
