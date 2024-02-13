@@ -9,7 +9,7 @@
 /* change to control tabbar height */
 /* try increasing to 20px if you see a black line under tabbar */
 #titlebar {
-    --tab-min-height: 16px !important;
+    --tab-min-height: 20px !important;
 }
 
 /* --- GENERAL DEBLOAT ---------------------------------- */
@@ -195,11 +195,11 @@
 }
 
 :root:not([customizing]) #TabsToolbar {
-    background-color: #222;
+    background-color: #212121;
 }
 
 :root:not([customizing]) #navigator-toolbox {
-    background-color: #222 !important;
+    background-color: #212121 !important;
 }
 
 #TabsToolbar,
@@ -293,9 +293,9 @@ tab {
     background: var(--tab-active-color) !important;
 }
 
-/* hide window controls */
-.titlebar-buttonbox-container {
-    display: none;
+/* disable window controls hover effect */
+.titlebar-buttonbox-container .titlebar-min, .titlebar-max, .titlebar-close {
+    background: none !important;
 }
 
 /* remove titlebar spacers */
