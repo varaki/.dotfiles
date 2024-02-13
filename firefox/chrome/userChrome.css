@@ -294,7 +294,7 @@ tab {
 }
 
 /* disable window controls hover effect */
-.titlebar-buttonbox-container .titlebar-min, .titlebar-max, .titlebar-close {
+.titlebar-buttonbox-container .titlebar-min, .titlebar-max,.titlebar-restore, .titlebar-close {
     background: none !important;
 }
 
