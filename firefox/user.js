@@ -88,9 +88,6 @@ user_pref("browser.cache.disk.enable", false);
 user_pref("browser.privatebrowsing.forceMediaMemoryCache", true);
 user_pref("browser.sessionstore.privacy_level", 2);
 
-/** SHUTDOWN & SANITIZING ***/
-user_pref("privacy.history.custom", true);
-
 /** SPECULATIVE CONNECTIONS ***/
 user_pref("network.http.speculative-parallel-limit", 0);
 user_pref("network.dns.disablePrefetch", true);
@@ -279,7 +276,7 @@ user_pref("dom.security.https_only_mode", true);
 user_pref("dom.security.https_only_mode_ever_enabled", true);
 
 // Disable bookmarks toolbar
-user_pref("browser.toolbars.bookmarks.visibility", false);
+user_pref("browser.toolbars.bookmarks.visibility", "never");
 
 // Disable kinetic scroll
 user_pref("apz.gtk.kinetic_scroll.enabled", false);
@@ -301,6 +298,8 @@ user_pref("network.protocol-handler.external.mailto", false);
 user_pref("browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar", false);
 
 // Clear history on exit
+user_pref("privacy.history.custom", true);
+user_pref("privacy.sanitize.sanitizeOnShutdown", true);
 user_pref("privacy.clearOnShutdown.cache", true);
 user_pref("privacy.clearOnShutdown.cookies", true);
 user_pref("privacy.clearOnShutdown.downloads", true);
