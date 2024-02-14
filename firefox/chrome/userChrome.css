@@ -12,18 +12,7 @@
     --tab-min-height: 20px !important;
 }
 
-/* --- GENERAL DEBLOAT ---------------------------------- */
-
-/* Bottom left page loading status or url preview */
-/* #statuspanel { */
-/*     display: none !important; */
-/* } */
-
 /* --- DEBLOAT NAVBAR ----------------------------------- */
-
-/* #unified-extensions-button { */
-/*     display: none; */
-/* } */
 
 #back-button {
     display: none;
@@ -142,10 +131,6 @@
 
 /* --- DEBLOAT URLBAR ----------------------------------- */
 
-/* #identity-box { */
-/*     display: none; */
-/* } */
-
 #pageAction-urlbar-_testpilot-containers {
     display: none;
 }
@@ -161,10 +146,6 @@
 #urlbar-zoom-button {
     display: none;
 }
-
-/* #tracking-protection-icon-container { */
-/*     display: none !important; */
-/* } */
 
 #reader-mode-button {
     display: none !important;
@@ -228,35 +209,20 @@ tab {
     border: none !important;
 }
 
-/* safari style tab width */
+/* qutebrowser style tab width */
 .tabbrowser-tab[fadein] {
     /* max-width: 100vw !important; */
     border: none
 }
-
-/* hide tab bar if only one tab open */
-/* tab:only-of-type { */
-/*     display: none; */
-/* } */
-
-/* Hide close button on tabs */
-/* #tabbrowser-tabs .tabbrowser-tab .tab-close-button { */
-/*     display: none !important; */
-/* } */
 
 /* hide container line on tab*/
 #tabbrowser-tabs .tab-context-line {
     display: none
 }
 
-/* /* disable favicons in tab */ */
-/* .tab-icon-stack:not([pinned]) { */
-/*     display: none !important; */
-/* } */
-
 .tab-icon-image {
     height: auto !important;
-    width: calc(var(--tab-height) / 1.5) !important;
+    width: 14px !important;
     margin-right: 4px !important;
 }
 
@@ -348,8 +314,6 @@ tab {
     transform: scaleY(0) !important;
 }
 
-/* #titlebar:hover~#nav-bar, */
-/* #nav-bar:hover, */
 #nav-bar:focus-within {
     --moz-transform: scale(1) !important;
     transform: scale(1) !important;
