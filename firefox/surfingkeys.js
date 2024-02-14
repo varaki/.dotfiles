@@ -10,7 +10,7 @@ settings.theme = `
     color: #fabd2f;
 }
 .sk_theme input {
-    color: #d9dce0;
+    color: #ebdbb2;
 }
 .sk_theme .url {
     color: #d79921;
