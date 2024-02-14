@@ -7,13 +7,13 @@ settings.theme = `
     color: #ebdbb2;
 }
 .sk_theme tbody {
-    color: #b8bb26;
+    color: #fabd2f;
 }
 .sk_theme input {
     color: #d9dce0;
 }
 .sk_theme .url {
-    color: #98971a;
+    color: #d79921;
 }
 .sk_theme .annotation {
     color: #ebdbb2;
