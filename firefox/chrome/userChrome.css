@@ -267,8 +267,12 @@ tab {
     background: var(--tab-active-color) !important;
 }
 
-/* disable window controls hover effect */
-.titlebar-buttonbox-container .titlebar-min, .titlebar-max,.titlebar-restore, .titlebar-close {
+/* disable window controls background effect */
+.titlebar-buttonbox-container,
+.titlebar-min,
+.titlebar-max,
+.titlebar-restore,
+.titlebar-close {
     background: none !important;
 }
 
