@@ -144,7 +144,7 @@
 }
 
 #urlbar-zoom-button {
-    display: none;
+    margin-right: 2em !important;
 }
 
 #reader-mode-button {
