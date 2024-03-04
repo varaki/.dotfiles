@@ -34,7 +34,7 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 
 # Path
-export PATH=${HOME}/.local/bin:/usr/local/go/bin:${HOME}/go/bin:/usr/local/pulse:${PATH}
+export PATH=${HOME}/.local/bin:${HOME}/go/bin:/usr/sbin:/usr/local/go/bin:${PATH}
 
 # Set prompt
 fpath=(${HOME}/.zsh-themes $fpath)
@@ -47,6 +47,31 @@ fi
 source ${HOME}/.asdf/asdf.sh
 # Append ASDF completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
+
+# Download eza if not present
+if ! command -v eza >& /dev/null; then
+    echo "Downloading eza, a modern, maintained replacement for ls..."
+    ARCH=$(uname -a | awk '{print $(NF-1)}')
+    case ${ARCH} in
+        x86_64)
+            EZA_PKG_NAME="eza_${ARCH}-unknown-linux-musl.tar.gz"
+        ;;
+        aarch64)
+            EZA_PKG_NAME="eza_${ARCH}-unknown-linux-gnu.tar.gz"
+        ;;
+        *)
+            echo "Could not find eza package for architecture '${ARCH}'"
+    esac
+
+    EZA_URL="https://github.com/eza-community/eza/releases/latest/download/${EZA_PKG_NAME}"
+    EZA_BIN_DEST_DIR="${HOME}/.local/bin/"
+    TMP_DIR=$(mktemp -d)
+    wget --no-check-certificate -q ${EZA_URL} -P ${TMP_DIR}
+    mkdir -p ${EZA_BIN_DEST_DIR}
+    tar xzf ${TMP_DIR}/${EZA_PKG_NAME} -C ${EZA_BIN_DEST_DIR}
+    rm -rf ${TMP_DIR}
+    echo "eza is now uccessfully installed"
+fi
 
 # Options
 export HISTFILE="${HOME}/.zsh_history"   # Set history file location
@@ -138,7 +163,8 @@ export FZF_ALT_C_COMMAND="fd --hidden --type d"
 # Aliases
 alias dots="cd ${HOME}/.dotfiles"
 alias less="less -i"
-alias ll="ls -lah"
+alias ll="eza -lag"
+alias l="eza -lg"
 alias man="man -i"
 alias xtar="tar --use-compress-program='xz --compress --keep -T 0' -cf"
 alias ptar="tar --use-compress-program=\"pigz -k \" -cf"
