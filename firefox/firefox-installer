@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+
+FF_POLICIES=$(
+    cat <<EOF
+{
+    "policies": {
+        "Extensions": {
+            "Install": [
+                "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi",
+                "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi"
+            ]
+        }
+    }
+}
+EOF
+)
+
+MOZILLA_REPO_PREFERENCES=$(
+    cat <<EOF
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+EOF
+)
+
+PSD_CONFIG=$(
+    cat <<EOF
+USE_OVERLAYFS="yes"
+BROWSERS="firefox"
+USE_BACKUPS="no"
+BACKUP_LIMIT=0
+EOF
+)
+
+removeMozillaRepo() {
+    rm -rf /etc/apt/keyrings/packages.mozilla.org.asc \
+        /etc/apt/sources.list.d/mozilla.list \
+        /etc/apt/preferences.d/mozilla
+}
+
+uninstallPackages() {
+    sudo apt purge --autoremove firefox firefox-esr profily-sync-daemon --yes
+}
+
+setupMozillaRepo() {
+    wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- >/etc/apt/keyrings/packages.mozilla.org.asc
+    echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" >/etc/apt/sources.list.d/mozilla.list
+    echo "${MOZILLA_REPO_PREFERENCES}" >/etc/apt/preferences.d/mozilla
+}
+
+installPackages() {
+    if ! command -v psd >&/dev/null || ! command -v firefox >&/dev/null; then
+        echo "Installing packages"
+        ${MOZILLA_REPO} && esr="" || esr="-esr"
+        apt update
+        apt install firefox${esr} profile-sync-daemon --yes
+    fi
+}
+
+profileSetup() {
+    if command -v psd >&/dev/null; then
+        # Stop services (systemd-containers must be installed)
+        machinectl shell "${SUDO_USER}"@ /bin/systemctl --user disable --now psd.service psd-resync.timer psd-resync.service >&/dev/null
+    fi
+
+    local sleeptime=20
+
+    echo "Cleaning up firefox profiles"
+    rm -rf /home/${SUDO_USER}/.mozilla
+
+    echo "Setting up extensions via policies.json"
+    local ff_dir=$(find /usr/lib -maxdepth 1 -type d -name "firefox*")
+    echo ${FF_POLICIES} >${ff_dir}/distribution/policies.json
+
+    echo "Starting firefox in headless mode and wait for ${sleeptime} seconds"
+    sudo --user ${SUDO_USER} --login firefox --headless >&/dev/null &
+    sleep ${sleeptime}
+
+    echo "Stopping firefox"
+    pkill -f "firefox.* --headless"
+
+    local profile_to_remove="$(find /home/${SUDO_USER}/.mozilla/firefox/ -maxdepth 1 -type d -name "*.default" ! -name "*.default-esr*" ! -name "*.default-release*")"
+    local profile_to_sync="$(find /home/${SUDO_USER}/.mozilla/firefox/ -maxdepth 1 -type d -name "*.default-esr*" -o -name "*.default-release*")"
+
+    rm -rf ${profile_to_remove}
+
+    echo "Copying custom config to ${profile_to_sync}"
+    sudo --user ${SUDO_USER} cp -rv chrome user.js ${profile_to_sync}
+
+}
+
+configurePSD() {
+    # Create config
+    sudo --user ${SUDO_USER} mkdir -p /home/${SUDO_USER}/.config/psd
+    echo "${PSD_CONFIG}" | sudo --user ${SUDO_USER} tee /home/${SUDO_USER}/.config/psd/psd.conf >&/dev/null
+
+    # Create sudoers rule
+    echo "${SUDO_USER} ALL=(ALL) NOPASSWD: /usr/bin/psd-overlay-helper" >/etc/sudoers.d/psd-overlay-helper
+
+    # Enable services (systemd-containers must be installed)
+    machinectl shell "${SUDO_USER}"@ /bin/systemctl --user enable --now psd.service psd-resync.timer psd-resync.service >&/dev/null
+}
+
+enableFirefoxPreload() {
+    echo "Creating firefox-preload.service"
+}
+
+if [ "$(whoami)" != "root" ]; then
+    echo "This script must be run with sudo"
+    exit 1
+fi
+
+MOZILLA_REPO=false
+
+while [ $# -ne 0 ]; do
+    case "${1}" in
+        -m | --enable-mozilla-repo)
+            MOZILLA_REPO=true
+            ;;
+        *)
+            echo "Invalid parameter: ${1}"
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+if ${MOZILLA_REPO}; then
+    echo "Enabling Mozilla's firefox repository"
+    setupMozillaRepo
+fi
+
+echo "Checking packages..."
+installPackages
+
+echo "Setting up firefox..."
+profileSetup
+enableFirefoxPreload
+
+echo "Configuring profile-sync-daemon..."
+configurePSD
