@@ -40,12 +40,22 @@ export PATH=${HOME}/.local/bin:${HOME}/go/bin:/usr/sbin:/usr/local/go/bin:${PATH
 fpath=(${HOME}/.zsh-themes $fpath)
 autoload -Uz prompt_varaki_setup && prompt_varaki_setup
 
-# Set up ASDF version manager
+# Set up asdf version manager
 if [[ ! -d "${HOME}/.asdf" ]]; then
-    git clone https://github.com/asdf-vm/asdf.git ${HOME}/.asdf --branch v0.10.2
+    echo "Setting up asdf version manager..."
+    git clone https://github.com/asdf-vm/asdf.git ${HOME}/.asdf --branch v0.14.0
+    install_asdf_plugins=true
 fi
 source ${HOME}/.asdf/asdf.sh
-# Append ASDF completions to fpath
+
+# Install asdf plugins
+if [[ ! -z ${install_asdf_plugins} ]] && [[ -e ${HOME}/.tool-versions ]]; then
+    awk '{ print $1 }' ${HOME}/.tool-versions | xargs -n1 asdf plugin-add
+    asdf install 2> /dev/null
+    rm -rf ${HOME}/.asdf/downloads/*
+fi
+
+# Append asdf completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
 
 # Download eza if not present
@@ -70,7 +80,7 @@ if ! command -v eza >& /dev/null; then
     mkdir -p ${EZA_BIN_DEST_DIR}
     tar xzf ${TMP_DIR}/${EZA_PKG_NAME} -C ${EZA_BIN_DEST_DIR}
     rm -rf ${TMP_DIR}
-    echo "eza is now uccessfully installed"
+    echo "eza is now successfully installed"
 fi
 
 # Options
