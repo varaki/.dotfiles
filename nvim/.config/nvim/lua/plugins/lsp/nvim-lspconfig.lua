@@ -101,6 +101,7 @@ return {
     local mason_tool_installer = require("mason-tool-installer")
     mason_tool_installer.setup({
       ensure_installed = {
+        "beautysh", -- shell formatter
         "prettier", -- generic formatter for multiple filetypes
         "shfmt", -- shell formatter
         "stylua", -- lua formatter

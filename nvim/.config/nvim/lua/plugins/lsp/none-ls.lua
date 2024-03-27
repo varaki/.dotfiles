@@ -22,6 +22,12 @@ return {
             "--case-indent",
           },
         }),
+        null_ls.builtins.formatting.beautysh.with({
+          extra_args = {
+            "--indent-size",
+            "4",
+          },
+        }),
 
         -- Prettier (html, json, yaml, markdown, toml)
         null_ls.builtins.formatting.prettier.with({
