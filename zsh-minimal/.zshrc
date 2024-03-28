@@ -62,6 +62,9 @@ setopt PUSHD_SILENT                      # Make pushd and popd silent
 # Expand aliases
 bindkey "^Xa" _expand_alias
 
+# Make sure CTRL+A, CTRL+E works fine in tmux too
+bindkey -e
+
 # Set up correct terminal-overrides in tmux.conf
 if [[ -z ${TMUX} ]]; then
     grep -qE "^set-option -ga terminal-overrides.*${TERM}" ~/.tmux.conf || sed --follow-symlinks -i 's%\(^set-option -ga terminal-overrides\).*%\1 ",'${TERM}':RGB"%g' ~/.tmux.conf
