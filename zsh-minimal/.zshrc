@@ -118,7 +118,10 @@ crypt() {
 alias encrypt="crypt encrypt $*"
 alias decrypt="crypt decrypt $*"
 
-# Setup auto-completion
+# Bash-like word deletion
+autoload -U select-word-style; select-word-style bash
+
+# Setup autocompletion
 autoload -U compinit; compinit
 zstyle ':completion:*' special-dirs false
 zstyle ':completion:*' menu select
