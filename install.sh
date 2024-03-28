@@ -90,6 +90,9 @@ function installNeovim() {
 function stowConfigs() {
     local user=${SUDO_USER:-${USER}}
     local dotfiles="/home/${user}/.dotfiles"
+    local dotfiles_url="https://codeberg.org/varaki/.dotfiles"
+    git -C /home/${user} clone ${dotfiles_url}
+
     declare -a configs
     configs=(
         "git"
