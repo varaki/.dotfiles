@@ -129,6 +129,7 @@ function enable_silent_login() {
 INSTALL_BASE=false
 INSTALL_DESKTOP=false
 INSTALL_KEYD=false
+INSTALL_NEOVIM=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
@@ -142,6 +143,9 @@ while [ $# -gt 0 ]; do
             ;;
         --keyd)
             INSTALL_KEYD=true
+            ;;
+        --neovim)
+            INSTALL_NEOVIM=true
             ;;
         -h | --help)
             echo "${HELP}"
@@ -167,9 +171,11 @@ if ${INSTALL_BASE}; then
     install_neovim
     stow_configs
     enable_silent_login
-    ${INSTALL_KEYD} && install_keyd
 fi
 
 if ${INSTALL_DESKTOP}; then
     install_desktop ${DESKTOP}
 fi
+
+${INSTALL_KEYD} && install_keyd
+${INSTALL_NEOVIM} && install_neovim
