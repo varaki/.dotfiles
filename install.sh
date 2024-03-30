@@ -7,6 +7,7 @@ Usage:
 
 Options:
     --base              Install base packages
+    --keyd              Install keyd (custom keyboard layout daemon)
     --desktop DESKTOP   Install desktop packages
 EOF
 )
@@ -47,7 +48,7 @@ XFCE=(
     "thunar"
 )
 
-function installPackages() {
+function install_packages() {
     local pkgs=${*}
     echo "Packages:"
     for pkg in ${pkgs[*]}; do
@@ -56,7 +57,7 @@ function installPackages() {
     apt install ${pkgs[*]} --yes
 }
 
-function installDesktop() {
+function install_desktop() {
     local desktop=${1:-XFCE}
     case ${desktop^^} in
         "XFCE")
@@ -68,10 +69,10 @@ function installDesktop() {
             ;;
     esac
     echo "Installing ${desktop} packages..."
-    installPackages ${packages[*]}
+    install_packages ${packages[*]}
 }
 
-function installNeovim() {
+function install_neovim() {
     local neovim_url="https://github.com/neovim/neovim/releases/download/v0.9.5/nvim.appimage"
     local neovim_path="/usr/local/bin/nvim"
 
@@ -87,7 +88,17 @@ function installNeovim() {
     apt purge --autoremove vim* --yes
 }
 
-function stowConfigs() {
+function install_keyd() {
+    local temp_dir=$(mktemp -d)
+    local user=${SUDO_USER:-${USER}}
+    git -C ${temp_dir} clone https://github.com/rvaiya/keyd
+    cd ${temp_dir}
+    make && make install
+    stow --dir=/home/${user}/.dotfiles --target=/ keyd
+    systemctl enable keyd && systemctl start keyd
+}
+
+function stow_configs() {
     local user=${SUDO_USER:-${USER}}
     local dotfiles="/home/${user}/.dotfiles"
     local dotfiles_url="https://codeberg.org/varaki/.dotfiles"
@@ -110,13 +121,14 @@ function stowConfigs() {
     done
 }
 
-function enableSilentLogin() {
+function enable_silent_login() {
     local user=${SUDO_USER:-${USER}}
     sudo --login --user ${user} touch /home/${user}/.hushlogin
 }
 
 INSTALL_BASE=false
 INSTALL_DESKTOP=false
+INSTALL_KEYD=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
@@ -127,6 +139,9 @@ while [ $# -gt 0 ]; do
             INSTALL_DESKTOP=true
             shift
             DESKTOP=${1}
+            ;;
+        --keyd)
+            INSTALL_KEYD=true
             ;;
         -h | --help)
             echo "${HELP}"
@@ -148,12 +163,13 @@ fi
 
 if ${INSTALL_BASE}; then
     echo "Installing BASE packages..."
-    installPackages ${BASE[*]}
-    installNeovim
-    stowConfigs
-    enableSilentLogin
+    install_packages ${BASE[*]}
+    install_neovim
+    stow_configs
+    enable_silent_login
+    ${INSTALL_KEYD} && install_keyd
 fi
 
 if ${INSTALL_DESKTOP}; then
-    installDesktop ${DESKTOP}
+    install_desktop ${DESKTOP}
 fi
