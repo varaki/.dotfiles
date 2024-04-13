@@ -88,6 +88,15 @@ function install_neovim() {
     apt purge --autoremove vim* --yes
 }
 
+function install_ssh() {
+    local user=${SUDO_USER:-${USER}}
+    local temp_dir=$(sudo --login --user ${user} mktemp -d)
+    local ssh_config_enc="/home/${user}/.dotfiles/ssh/ssh.tar.gz.enc"
+    sudo --login --user ${user} openssl enc -aes-256-cbc -pbkdf2 -d -in "${ssh_config_enc}" -out ${temp_dir}/ssh.tar.gz
+    sudo --login --user ${user} tar xzvf ${temp_dir}/ssh.tar.gz -C /home/${user}
+    rm -rf ${temp_dir}
+}
+
 function install_keyd() {
     local temp_dir=$(mktemp -d)
     local user=${SUDO_USER:-${USER}}
@@ -96,6 +105,7 @@ function install_keyd() {
     make && make install
     stow --dir=/home/${user}/.dotfiles --target=/ keyd
     systemctl enable keyd && systemctl start keyd
+    rm -rf ${temp_dir}
 }
 
 function stow_configs() {
@@ -147,6 +157,9 @@ while [ $# -gt 0 ]; do
         --neovim)
             INSTALL_NEOVIM=true
             ;;
+        --ssh)
+            INSTALL_SSH=true
+            ;;
         -h | --help)
             echo "${HELP}"
             exit
@@ -179,3 +192,4 @@ fi
 
 ${INSTALL_KEYD} && install_keyd
 ${INSTALL_NEOVIM} && install_neovim
+${INSTALL_SSH} && install_ssh
