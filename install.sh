@@ -140,6 +140,7 @@ INSTALL_BASE=false
 INSTALL_DESKTOP=false
 INSTALL_KEYD=false
 INSTALL_NEOVIM=false
+INSTALL_SSH=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
