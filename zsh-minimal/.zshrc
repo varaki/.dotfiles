@@ -1,3 +1,22 @@
+# Export machine hostname
+export MACHINE="$(uname -n)"
+
+# Source server zsh config
+if [[ "${MACHINE}" == "sero"* ]]; then
+    # Takes ages to load, not really needed
+    # [ -e /etc/home/zshrc ] && source /etc/home/zshrc
+
+    # The only important part is this module function
+    export MODULEPATH=/env/common/modules
+    module(){
+        {
+            eval `/app/modules/0/bin/modulecmd zsh "$@"`
+        } 2>&1
+    }
+    # Load modules if not already loaded
+    module list --terse | grep -q "No Modulefiles Currently Loaded." && source ${HOME}/.modules
+fi
+
 # Locale settings
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US.UTF-8"
@@ -6,15 +25,44 @@ export LC_ALL="en_US.UTF-8"
 # Editor settings
 export EDITOR="nvim"
 export VISUAL="nvim"
+export SYSTEMD_EDITOR="nvim"
 
 # Path
 export PATH=${HOME}/.local/bin:${HOME}/go/bin:/usr/sbin:/usr/local/go/bin:${PATH}
 
 # Additional zsh configs
-export ZSH_CONFIG_DIR="${HOME}/.config/zsh"
+export XDG_CONFIG_DIR="${HOME}/.config"
+export ZSH_CONFIG_DIR="${XDG_CONFIG_DIR}/zsh"
 export ZSH_PLUGINS_DIR="${ZSH_CONFIG_DIR}/plugins"
 
-# Download eza if not present
+# Set up asdf version manager
+if [[ ! -d "${HOME}/.asdf" ]]; then
+    echo "Setting up asdf version manager..."
+    git clone https://github.com/asdf-vm/asdf.git ${HOME}/.asdf --branch v0.14.0
+    install_asdf_plugins=true
+fi
+source ${HOME}/.asdf/asdf.sh
+
+# Install asdf plugins
+if [[ ! -z ${install_asdf_plugins} ]] && [[ -e ${HOME}/.tool-versions ]]; then
+    awk '{ print $1 }' ${HOME}/.tool-versions | xargs -n1 asdf plugin-add
+    asdf install 2> /dev/null
+    rm -rf ${HOME}/.asdf/downloads/*
+fi
+
+# Append asdf completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
+
+# Download otpgen
+if ! command -v otpgen >& /dev/null; then
+    echo "Downloading otpgen 2FA code generator..."
+    OTPGEN_URL="https://github.com/varaki/otpgen/releases/download/v1.0.0/otpgen"
+    OTPGEN_BIN_DEST="${HOME}/.local/bin/otpgen"
+    wget --no-check-certificate -q ${OTPGEN_URL} -O ${OTPGEN_BIN_DEST}
+    chmod +x ${OTPGEN_BIN_DEST}
+fi
+
+# Download eza
 if ! command -v eza >& /dev/null; then
     echo "Downloading eza, a modern, maintained replacement for ls..."
     ARCH=$(uname -a | awk '{print $(NF-1)}')
@@ -85,6 +133,7 @@ export FZF_ALT_C_COMMAND="fd --hidden --type d"
 # Aliases
 alias dots="cd ${HOME}/.dotfiles"
 alias less="less -i"
+alias ls="ls --color=tty"
 alias ll="eza -lag"
 alias l="eza -lg"
 alias man="man -i"
@@ -92,7 +141,7 @@ alias xtar="tar --use-compress-program='xz --compress --keep -T 0' -cf"
 alias ptar="tar --use-compress-program=\"pigz -k \" -cf"
 alias xuntar="tar --use-compress-program='xz --decompress --keep -T 0' -xf"
 alias puntar="tar --use-compress-program=\"pigz -k \" -xf"
-alias stmux="tmux has-session -t $(hostname -s) >& /dev/null || tmux new -s $(hostname -s) -d; tmux a"
+alias stmux="tmux has-session -t $(uname -n) >& /dev/null || tmux new -s $(uname -n) -d; tmux a"
 [ -e ${HOME}/.zshrc-otp-auth ] && source ${HOME}/.zshrc-otp-auth
 
 # Encrypt and decrypt with openssl
@@ -162,6 +211,23 @@ source ${ZSH_PLUGINS_DIR}/sudo/sudo.plugin.zsh
 # Set prompt
 fpath=(${ZSH_CONFIG_DIR}/themes $fpath)
 autoload -Uz prompt_varaki_setup && prompt_varaki_setup
+
+# Set up work environment
+work_env=false
+
+case "${MACHINE}" in
+    "sero"*|"elx"*)
+        work_env=true
+        ;;
+esac
+
+PRODUCT="$(test -f /sys/devices/virtual/dmi/id/product_name && cat /sys/devices/virtual/dmi/id/product_name)"
+case "${PRODUCT}" in
+    "OpenStack"*|"VMWare"*)
+        work_env=true
+        ;;
+esac
+${work_env} && [ -e ${HOME}/.zshrc-work ] && source ${HOME}/.zshrc-work
 
 # Run pfetch
 pfetch
