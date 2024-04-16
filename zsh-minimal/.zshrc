@@ -141,7 +141,7 @@ alias xtar="tar --use-compress-program='xz --compress --keep -T 0' -cf"
 alias ptar="tar --use-compress-program=\"pigz -k \" -cf"
 alias xuntar="tar --use-compress-program='xz --decompress --keep -T 0' -xf"
 alias puntar="tar --use-compress-program=\"pigz -k \" -xf"
-alias stmux="tmux has-session -t $(uname -n) >& /dev/null || tmux new -s $(uname -n) -d; tmux a"
+alias stmux="tmux has-session -t ${MACHINE} >& /dev/null || tmux new -s ${MACHINE} -d; tmux a"
 [ -e ${HOME}/.zshrc-otp-auth ] && source ${HOME}/.zshrc-otp-auth
 
 # Encrypt and decrypt with openssl
@@ -166,6 +166,20 @@ crypt() {
 }
 alias encrypt="crypt encrypt $*"
 alias decrypt="crypt decrypt $*"
+
+# Send keys to tmux with delay
+delayed_send_keys() {
+    local keys=${*}
+    local delay=0.5
+    sleep "${delay}"
+
+    # Separate "Enter" from the keys as it is not getting interpreted otherwise
+    if [[ ${keys} == *"Enter" ]]; then
+        tmux send-keys "${keys// Enter/}" Enter
+    else
+        tmux send-keys ${keys}
+    fi
+}
 
 # Bash-like word deletion
 autoload -U select-word-style; select-word-style bash
