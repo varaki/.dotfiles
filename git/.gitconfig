@@ -7,11 +7,16 @@
     editor = nvim
 [alias]
     co = checkout
+    cobr = checkout -b
+    cp = cherry-pick
+    cpc = cherry-pick --continue
     br = branch
     bra = branch -avv
     ci = commit
     st = status
     lg = log --graph --date=format:'%Y-%m-%d %H:%M' --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit
+    tree = log --graph --all --pretty=oneline --decorate
+    find = branch --remote --contains
     stal = stash list
     stap = stash pop
 [pager]
@@ -20,9 +25,11 @@
 [diff]
     tool = nvim -d
     colorMoved = zebra
+[difftool]
+    prompt = false
 [merge]
     tool = vim_mergetool
-    conflictstyle = diff3
+    conflictStyle = diff3
 [mergetool "vim_mergetool"]
     cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
     trustExitCode = true
