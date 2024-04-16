@@ -118,9 +118,9 @@ export RIPGREP_CONFIG_PATH="${HOME}/.config/ripgrep/config"
 
 # Setup fzf and fd
 [ -e ${HOME}/.fzf-key-bindings.zsh ] && source ${HOME}/.fzf-key-bindings.zsh
-export FZF_DEFAULT_COMMAND="fd --hidden"
-export FZF_CTRL_T_COMMAND="fd --hidden"
-export FZF_ALT_C_COMMAND="fd --hidden --type d"
+export FZF_DEFAULT_COMMAND="fd --unrestricted"
+export FZF_CTRL_T_COMMAND="fd --unrestricted"
+export FZF_ALT_C_COMMAND="fd --unrestricted --type d"
 
 # Aliases
 alias dots="cd ${HOME}/.dotfiles"
