@@ -133,6 +133,17 @@ alias ptar="tar --use-compress-program=\"pigz -k \" -cf"
 alias xuntar="tar --use-compress-program='xz --decompress --keep -T 0' -xf"
 alias puntar="tar --use-compress-program=\"pigz -k \" -xf"
 alias stmux="tmux has-session -t ${MACHINE} >& /dev/null || tmux new -s ${MACHINE} -d; tmux a"
+alias hdd="cd /mnt/hdd/"
+alias hdd2="cd /mnt/hdd2/"
+alias hdd="cd /mnt/hdd"
+alias hdd2="cd /mnt/hdd2"
+alias data="cd /mnt/hdd/data"
+alias data2="cd /mnt/hdd2/data"
+alias share="cd /mnt/hdd/share"
+alias share2="cd /mnt/hdd2/share"
+alias rt="tmux -L rt-socket attach -t rt-session"
+alias cleardlogs="sudo sh -c 'truncate -s 0 /var/lib/docker/containers/*/*-json.log'"
+
 [ -e ${HOME}/.zshrc-otp-auth ] && source ${HOME}/.zshrc-otp-auth
 
 # Encrypt and decrypt with openssl
