@@ -1,6 +1,5 @@
 nvim/.config/nvim/lazy-lock.json
 zsh/.zshrc-otp-auth
 zsh/.zshrc-work
-zsh-minimal/.zshrc-otp-auth
-zsh-minimal/.zshrc-work
-zsh-minimal/.config/zsh/plugins/
+zsh/.zshrc-work-sero
+zsh/.config/zsh/plugins/
