@@ -20,7 +20,7 @@ export ZSH_CONFIG_DIR="${XDG_CONFIG_DIR}/zsh"
 export ZSH_PLUGINS_DIR="${ZSH_CONFIG_DIR}/plugins"
 
 # Set up asdf version manager
-if [[ ! -d "${HOME}/.asdf" ]]; then
+if [[ ! -d "${HOME}/.asdf" || -z "$(ls -A ${HOME}/.asdf)" ]]; then
     echo "Setting up asdf version manager..."
     git clone https://github.com/asdf-vm/asdf.git ${HOME}/.asdf --branch v0.14.0
     install_asdf_plugins=true
