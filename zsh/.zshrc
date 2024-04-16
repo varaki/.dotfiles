@@ -97,6 +97,7 @@ setopt HIST_NO_STORE                     # Don't store history commands
 setopt AUTO_PUSHD                        # Push the current directory to the stack
 setopt PUSHD_IGNORE_DUPS                 # Don't store duplicates in the stack
 setopt PUSHD_SILENT                      # Make pushd and popd silent
+setopt INTERACTIVE_COMMENTS              # Allow interactive comments
 
 # Expand aliases
 bindkey "^Xa" _expand_alias
@@ -223,6 +224,9 @@ fpath=(${ZSH_PLUGINS_DIR}/zsh-completions/src $fpath)
 source ${ZSH_PLUGINS_DIR}/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
 source ${ZSH_PLUGINS_DIR}/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 source ${ZSH_PLUGINS_DIR}/sudo/sudo.plugin.zsh
+
+# Override default comment styling (requires zsh-syntax-highlighting)
+ZSH_HIGHLIGHT_STYLES[comment]='fg=008,bold'
 
 # Set prompt
 fpath=(${ZSH_CONFIG_DIR}/themes $fpath)
