@@ -98,6 +98,7 @@ setopt AUTO_PUSHD                        # Push the current directory to the sta
 setopt PUSHD_IGNORE_DUPS                 # Don't store duplicates in the stack
 setopt PUSHD_SILENT                      # Make pushd and popd silent
 setopt INTERACTIVE_COMMENTS              # Allow interactive comments
+setopt AUTOCD                            # Enter directories by just typing their names
 
 # Expand aliases
 bindkey "^Xa" _expand_alias
