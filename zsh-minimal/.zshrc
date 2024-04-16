@@ -1,22 +1,6 @@
 # Export machine hostname
 export MACHINE="$(uname -n)"
 
-# Source server zsh config
-if [[ "${MACHINE}" == "sero"* ]]; then
-    # Takes ages to load, not really needed
-    # [ -e /etc/home/zshrc ] && source /etc/home/zshrc
-
-    # The only important part is this module function
-    export MODULEPATH=/env/common/modules
-    module(){
-        {
-            eval `/app/modules/0/bin/modulecmd zsh "$@"`
-        } 2>&1
-    }
-    # Load modules if not already loaded
-    module list --terse | grep -q "No Modulefiles Currently Loaded." && source ${HOME}/.modules
-fi
-
 # Locale settings
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US.UTF-8"
@@ -28,7 +12,7 @@ export VISUAL="nvim"
 export SYSTEMD_EDITOR="nvim"
 
 # Path
-export PATH=${HOME}/.local/bin:${HOME}/go/bin:/usr/sbin:/usr/local/go/bin:${PATH}
+export PATH=${HOME}/.local/bin:/usr/sbin:${HOME}/go/bin:/usr/local/go/bin:${PATH}
 
 # Additional zsh configs
 export XDG_CONFIG_DIR="${HOME}/.config"
@@ -242,6 +226,11 @@ case "${PRODUCT}" in
         ;;
 esac
 ${work_env} && [ -e ${HOME}/.zshrc-work ] && source ${HOME}/.zshrc-work
+
+# Source server zsh config
+if [[ "${MACHINE}" == "sero"* ]]; then
+    [ -e ${HOME}/.zshrc-work-sero ] && source ${HOME}/.zshrc-work-sero
+fi
 
 # Run pfetch
 pfetch
