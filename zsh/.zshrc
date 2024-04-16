@@ -1,6 +1,9 @@
 # Export machine hostname
 export MACHINE="$(uname -n)"
 
+# Export machine architecture
+export ARCH=$(uname -a | awk '{print $(NF-1)}')
+
 # Locale settings
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US.UTF-8"
@@ -15,6 +18,7 @@ export SYSTEMD_EDITOR="nvim"
 export PATH=${HOME}/.local/bin:/usr/sbin:${HOME}/go/bin:/usr/local/go/bin:${PATH}
 
 # Additional zsh configs
+export LOCAL_BIN_DIR="${HOME}/.local/bin"
 export XDG_CONFIG_DIR="${HOME}/.config"
 export ZSH_CONFIG_DIR="${XDG_CONFIG_DIR}/zsh"
 export ZSH_PLUGINS_DIR="${ZSH_CONFIG_DIR}/plugins"
@@ -37,19 +41,29 @@ fi
 # Append asdf completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
 
+# Download utilities
+download_and_extract() {
+    local url=${1}
+    local dest=${2}
+    local tempdir=$(mktemp -d)
+    local pkg_name=$(basename ${url})
+
+    wget --no-check-certificate -q ${url} -P ${tempdir}
+    tar xzf ${tempdir}/${pkg_name} -C ${dest}
+    rm -rf ${tempdir}
+}
+
 # Download otpgen
 if ! command -v otpgen >& /dev/null; then
     echo "Downloading otpgen 2FA code generator..."
-    OTPGEN_URL="https://github.com/varaki/otpgen/releases/download/v1.0.0/otpgen"
-    OTPGEN_BIN_DEST="${HOME}/.local/bin/otpgen"
-    wget --no-check-certificate -q ${OTPGEN_URL} -O ${OTPGEN_BIN_DEST}
-    chmod +x ${OTPGEN_BIN_DEST}
+    OTPGEN_PKG_NAME="otpgen-${ARCH}.tar.gz"
+    OTPGEN_URL="https://github.com/varaki/otpgen/releases/download/v1.0.0/${OTPGEN_PKG_NAME}"
+    download_and_extract ${OTPGEN_URL} ${LOCAL_BIN_DIR}
 fi
 
 # Download eza
 if ! command -v eza >& /dev/null; then
     echo "Downloading eza, a modern, maintained replacement for ls..."
-    ARCH=$(uname -a | awk '{print $(NF-1)}')
     case ${ARCH} in
         x86_64)
             EZA_PKG_NAME="eza_${ARCH}-unknown-linux-musl.tar.gz"
@@ -60,15 +74,8 @@ if ! command -v eza >& /dev/null; then
         *)
             echo "Could not find eza package for architecture '${ARCH}'"
     esac
-
     EZA_URL="https://github.com/eza-community/eza/releases/latest/download/${EZA_PKG_NAME}"
-    EZA_BIN_DEST_DIR="${HOME}/.local/bin/"
-    TMP_DIR=$(mktemp -d)
-    wget --no-check-certificate -q ${EZA_URL} -P ${TMP_DIR}
-    mkdir -p ${EZA_BIN_DEST_DIR}
-    tar xzf ${TMP_DIR}/${EZA_PKG_NAME} -C ${EZA_BIN_DEST_DIR}
-    rm -rf ${TMP_DIR}
-    echo "eza is now successfully installed"
+    download_and_extract ${EZA_URL} ${LOCAL_BIN_DIR}
 fi
 
 # Options
