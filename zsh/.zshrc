@@ -144,6 +144,7 @@ alias data2="cd /mnt/hdd2/data"
 alias share="cd /mnt/hdd/share"
 alias share2="cd /mnt/hdd2/share"
 alias rt="tmux -L rt-socket attach -t rt-session"
+alias dc="docker-compose"
 alias cleardlogs="sudo sh -c 'truncate -s 0 /var/lib/docker/containers/*/*-json.log'"
 
 [ -e ${HOME}/.zshrc-otp-auth ] && source ${HOME}/.zshrc-otp-auth
