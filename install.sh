@@ -23,9 +23,11 @@ BASE=(
     "fuse"
     "fzf"
     "git"
+    "gpg"
     "htop"
     "kbd"
     "locales"
+    "pigz"
     "python3-venv"
     "ripgrep"
     "stow"
@@ -186,6 +188,7 @@ fi
 if ${INSTALL_BASE}; then
     echo "Installing BASE packages..."
     install_packages ${BASE[*]}
+    command -v fd || ln -s $(command -v fdfind) "$(dirname $(command -v fdfind))/fd"
     install_neovim
     stow_configs
     enable_silent_login
