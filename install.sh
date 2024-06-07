@@ -17,20 +17,22 @@ NEOVIM_DESKTOP_XZ_ARCHIVE="/Td6WFoAAATm1rRGBMCQGoCgASEBFgAAAAAAAHoeOfTgT/8NCF0AO
 declare -a BASE
 BASE=(
     "build-essential"
+    "curl"
     "fd-find"
     "fonts-recommended"
-    "fuse3"
+    "fuse"
     "fzf"
     "git"
     "htop"
     "kbd"
     "locales"
+    "python3-venv"
     "ripgrep"
     "stow"
     "tmux"
+    "unzip"
     "wget"
     "zip"
-    "unzip"
     "zsh"
 )
 
@@ -112,7 +114,9 @@ function stow_configs() {
     local user=${SUDO_USER:-${USER}}
     local dotfiles="/home/${user}/.dotfiles"
     local dotfiles_url="https://codeberg.org/varaki/.dotfiles"
-    git -C /home/${user} clone ${dotfiles_url}
+    test -d ${dotfiles} || git -C /home/${user} clone ${dotfiles_url}
+
+    mkdir -p /home/${user}/.local/bin
 
     declare -a configs
     configs=(
