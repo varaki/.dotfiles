@@ -16,6 +16,7 @@ NEOVIM_DESKTOP_XZ_ARCHIVE="/Td6WFoAAATm1rRGBMCQGoCgASEBFgAAAAAAAHoeOfTgT/8NCF0AO
 
 declare -a BASE
 BASE=(
+    "alacritty"
     "build-essential"
     "curl"
     "fd-find"
@@ -58,7 +59,7 @@ function install_packages() {
     for pkg in ${pkgs[*]}; do
         echo "- ${pkg}"
     done
-    apt install ${pkgs[*]} --yes
+    apt install "${pkgs[*]}" --yes
 }
 
 function install_desktop() {
@@ -73,7 +74,7 @@ function install_desktop() {
             ;;
     esac
     echo "Installing ${desktop} packages..."
-    install_packages ${packages[*]}
+    install_packages "${packages[*]}"
 }
 
 function install_neovim() {
@@ -94,31 +95,31 @@ function install_neovim() {
 
 function install_ssh() {
     local user=${SUDO_USER:-${USER}}
-    local temp_dir=$(sudo --login --user ${user} mktemp -d)
+    local -r temp_dir="$(sudo --login --user "${user}" mktemp -d)"
     local ssh_config_enc="/home/${user}/.dotfiles/ssh/ssh.tar.gz.enc"
-    sudo --login --user ${user} openssl enc -aes-256-cbc -pbkdf2 -d -in "${ssh_config_enc}" -out ${temp_dir}/ssh.tar.gz
-    sudo --login --user ${user} tar xzvf ${temp_dir}/ssh.tar.gz -C /home/${user}
-    rm -rf ${temp_dir}
+    sudo --login --user "${user}" openssl enc -aes-256-cbc -pbkdf2 -d -in "${ssh_config_enc}" -out "${temp_dir}"/ssh.tar.gz
+    sudo --login --user "${user}" tar xzvf "${temp_dir}"/ssh.tar.gz -C /home/"${user}"
+    rm -rf "${temp_dir}"
 }
 
 function install_keyd() {
-    local temp_dir=$(mktemp -d)
+    local -r temp_dir=$(mktemp -d)
     local user=${SUDO_USER:-${USER}}
-    git -C ${temp_dir} clone https://github.com/rvaiya/keyd
-    cd ${temp_dir}
+    git -C "${temp_dir}" clone https://github.com/rvaiya/keyd
+    cd "${temp_dir}" || exit
     make && make install
-    stow --dir=/home/${user}/.dotfiles --target=/ keyd
+    stow --dir=/home/"${user}"/.dotfiles --target=/ keyd
     systemctl enable keyd && systemctl start keyd
-    rm -rf ${temp_dir}
+    rm -rf "${temp_dir}"
 }
 
 function stow_configs() {
     local user=${SUDO_USER:-${USER}}
     local dotfiles="/home/${user}/.dotfiles"
     local dotfiles_url="https://codeberg.org/varaki/.dotfiles"
-    test -d ${dotfiles} || git -C /home/${user} clone ${dotfiles_url}
+    test -d "${dotfiles}" || git -C /home/"${user}" clone "${dotfiles_url}"
 
-    mkdir -p /home/${user}/.local/bin
+    mkdir -p /home/"${user}"/.local/bin
 
     declare -a configs
     configs=(
@@ -128,18 +129,18 @@ function stow_configs() {
         "tmux"
         "zsh"
     )
-    for config in ${configs[@]}; do
-        sudo --login --user ${user} stow --restow --dir ${dotfiles} --target /home/${user} ${config}
+    for config in "${configs[@]}"; do
+        sudo --login --user "${user}" stow --restow --dir "${dotfiles}" --target /home/"${user}" "${config}"
         if [ "${config}" == "zsh" ]; then
-            local curr_lang=$(locale | grep LANG= | cut -d'=' -f2)
-            sudo --login --user ${user} sed -i 's%en_US.UTF-8%'${curr_lang}'%g' /home/${user}/.zshrc
+            local -r curr_lang=$(locale | grep LANG= | cut -d'=' -f2)
+            sudo --login --user "${user}" sed -i 's%en_US.UTF-8%'"${curr_lang}"'%g' /home/"${user}"/.zshrc
         fi
     done
 }
 
 function enable_silent_login() {
     local user=${SUDO_USER:-${USER}}
-    sudo --login --user ${user} touch /home/${user}/.hushlogin
+    sudo --login --user "${user}" touch /home/"${user}"/.hushlogin
 }
 
 INSTALL_BASE=false
@@ -187,15 +188,16 @@ fi
 
 if ${INSTALL_BASE}; then
     echo "Installing BASE packages..."
-    install_packages ${BASE[*]}
-    command -v fd || ln -s $(command -v fdfind) "$(dirname $(command -v fdfind))/fd"
+    install_packages "${BASE[*]}"
+    command -v fd || ln -s "$(command -v fdfind)" "$(dirname "$(command -v fdfind)")/fd"
+    curl -sSL https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info | tic -x - # Set terminal info for alacritty
     install_neovim
     stow_configs
     enable_silent_login
 fi
 
 if ${INSTALL_DESKTOP}; then
-    install_desktop ${DESKTOP}
+    install_desktop "${DESKTOP}"
 fi
 
 ${INSTALL_KEYD} && install_keyd
