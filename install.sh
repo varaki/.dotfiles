@@ -99,6 +99,10 @@ function install_ssh() {
     local ssh_config_enc="/home/${user}/.dotfiles/ssh/ssh.tar.gz.enc"
     sudo --login --user "${user}" openssl enc -aes-256-cbc -pbkdf2 -d -in "${ssh_config_enc}" -out "${temp_dir}"/ssh.tar.gz
     sudo --login --user "${user}" tar xzvf "${temp_dir}"/ssh.tar.gz -C /home/"${user}"
+    # Replace git remotes
+    sudo --login --user git -C /home/${user}/.dotfiles remove origin
+    sudo --login --user git -C /home/${user}/.dotfiles remote add codeberg git@codeberg.org:varaki/.dotfiles.git
+    sudo --login --user git -C /home/${user}/.dotfiles remote add github git@github.com:varaki/.dotfiles.git
     rm -rf "${temp_dir}"
 }
 
