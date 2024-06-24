@@ -59,7 +59,7 @@ function install_packages() {
     for pkg in ${pkgs[*]}; do
         echo "- ${pkg}"
     done
-    apt install "${pkgs[*]}" --yes
+    apt install ${pkgs[*]} --yes
 }
 
 function install_desktop() {
@@ -106,7 +106,7 @@ function install_keyd() {
     local -r temp_dir=$(mktemp -d)
     local user=${SUDO_USER:-${USER}}
     git -C "${temp_dir}" clone https://github.com/rvaiya/keyd
-    cd "${temp_dir}" || exit
+    cd "${temp_dir}/keyd" || exit
     make && make install
     stow --dir=/home/"${user}"/.dotfiles --target=/ keyd
     systemctl enable keyd && systemctl start keyd
@@ -119,7 +119,7 @@ function stow_configs() {
     local dotfiles_url="https://codeberg.org/varaki/.dotfiles"
     test -d "${dotfiles}" || git -C /home/"${user}" clone "${dotfiles_url}"
 
-    mkdir -p /home/"${user}"/.local/bin
+    sudo --login --user "${user}" mkdir -p /home/"${user}"/.local/bin
 
     declare -a configs
     configs=(
