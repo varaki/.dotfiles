@@ -56,6 +56,7 @@ XFCE=(
     "thunar"
     "pipewire-audio"
     "network-manager-gnome"
+    "imv"
 )
 
 function install_packages() {
@@ -80,6 +81,10 @@ function install_desktop() {
     esac
     echo "Installing ${desktop} packages..."
     install_packages "${packages[*]}"
+
+    if [ "${desktop}" == "XFCE"]; then
+        ln -s /usr/bin/imv-x11 /usr/bin/imv
+    fi
 }
 
 function install_neovim() {
@@ -101,7 +106,7 @@ function install_neovim() {
     echo "${NEOVIM_DESKTOP_XZ_ARCHIVE}" | base64 -d | tar xJvf - -C /
 
     # Remove regular vim
-    apt purge --autoremove vim* --yes >& /dev/null
+    apt purge --autoremove vim* --yes >&/dev/null
     rm -rf ${tempdir}
 }
 
