@@ -37,9 +37,9 @@ BASE=(
     "tmux"
     "unzip"
     "wget"
+    "xdg-utils"
     "zip"
     "zsh"
-    "xdg-utils"
 )
 
 declare -a XFCE
@@ -55,6 +55,7 @@ XFCE=(
     "xfce4-settings"
     "thunar"
     "pipewire-audio"
+    "network-manager-gnome"
 )
 
 function install_packages() {
