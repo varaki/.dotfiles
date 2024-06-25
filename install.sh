@@ -82,26 +82,26 @@ function install_desktop() {
 }
 
 function install_neovim() {
-    local neovim_url="https://github.com/neovim/neovim/releases/download/v0.10.0/nvim.appimage"
-    local neovim_path="/usr/local/bin/nvim"
+    local neovim_url="https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz"
+    local neovim_path="/usr/local/bin/nvim-linux64"
+    local neovim_bin="/usr/local/bin/nvim"
 
     # Cleanup
     rm -rf ${neovim_path}
-    rm -rf /usr/local/bin/squashfs-root
+    rm -rf ${neovim_bin}
 
     # Download and install
-    wget ${neovim_url} -O /usr/local/bin/nvim
-    chmod +x /usr/local/bin/nvim
-    cd /usr/local/bin/
-    ./nvim --appimage-extract
-    rm -f /usr/local/bin/nvim
-    ln -s /usr/local/bin/squashfs-root/usr/bin/nvim /usr/local/bin/nvim
+    local tempdir=$(mktemp -d)
+    wget ${neovim_url} -O ${tempdir}/$(basename ${neovim_url})
+    tar xzvf ${tempdir}/$(basename ${neovim_url}) -C /usr/local/bin/
+    ln -s ${neovim_path}/bin/nvim /usr/local/bin/nvim
 
     # Set up .desktop file and icon
     echo "${NEOVIM_DESKTOP_XZ_ARCHIVE}" | base64 -d | tar xJvf - -C /
 
     # Remove regular vim
     apt purge --autoremove vim* --yes >& /dev/null
+    rm -rf ${tempdir}
 }
 
 function install_ssh() {
