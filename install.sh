@@ -7,7 +7,9 @@ Usage:
 
 Options:
     --base              Install base packages
+    --ssh               Configure ssh
     --keyd              Install keyd (custom keyboard layout daemon)
+    --neovim            Install neovim
     --desktop DESKTOP   Install desktop packages
 EOF
 )
@@ -37,6 +39,7 @@ BASE=(
     "wget"
     "zip"
     "zsh"
+    "xdg-utils"
 )
 
 declare -a XFCE
@@ -51,6 +54,7 @@ XFCE=(
     "xfce4-session"
     "xfce4-settings"
     "thunar"
+    "pipewire-audio"
 )
 
 function install_packages() {
@@ -78,19 +82,26 @@ function install_desktop() {
 }
 
 function install_neovim() {
-    local neovim_url="https://github.com/neovim/neovim/releases/download/v0.9.5/nvim.appimage"
+    local neovim_url="https://github.com/neovim/neovim/releases/download/v0.10.0/nvim.appimage"
     local neovim_path="/usr/local/bin/nvim"
 
-    if [ ! -e ${neovim_path} ]; then
-        wget ${neovim_url} -O /usr/local/bin/nvim
-        chmod +x /usr/local/bin/nvim
-    fi
+    # Cleanup
+    rm -rf ${neovim_path}
+    rm -rf /usr/local/bin/squashfs-root
+
+    # Download and install
+    wget ${neovim_url} -O /usr/local/bin/nvim
+    chmod +x /usr/local/bin/nvim
+    cd /usr/local/bin/
+    ./nvim --appimage-extract
+    rm -f /usr/local/bin/nvim
+    ln -s /usr/local/bin/squashfs-root/usr/bin/nvim /usr/local/bin/nvim
 
     # Set up .desktop file and icon
     echo "${NEOVIM_DESKTOP_XZ_ARCHIVE}" | base64 -d | tar xJvf - -C /
 
     # Remove regular vim
-    apt purge --autoremove vim* --yes
+    apt purge --autoremove vim* --yes >& /dev/null
 }
 
 function install_ssh() {
