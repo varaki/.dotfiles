@@ -82,6 +82,8 @@ function install_desktop() {
     esac
     echo "Installing ${desktop} packages..."
     install_packages "${packages[*]}"
+    echo "Installing fonts..."
+    install_fonts
 
     if [ "${desktop}" == "XFCE" ]; then
         ln -s /usr/bin/imv-x11 /usr/bin/imv
@@ -98,9 +100,9 @@ function install_neovim() {
     rm -rf ${neovim_bin}
 
     # Download and install
-    local tempdir=$(mktemp -d)
-    wget ${neovim_url} -O ${tempdir}/$(basename ${neovim_url})
-    tar xzvf ${tempdir}/$(basename ${neovim_url}) -C /usr/local/bin/
+    local temp_dir=$(mktemp -d)
+    wget ${neovim_url} -O ${temp_dir}/$(basename ${neovim_url})
+    tar xzvf ${temp_dir}/$(basename ${neovim_url}) -C /usr/local/bin/
     ln -s ${neovim_path}/bin/nvim /usr/local/bin/nvim
 
     # Set up .desktop file and icon
@@ -108,7 +110,7 @@ function install_neovim() {
 
     # Remove regular vim
     apt purge --autoremove vim* --yes >&/dev/null
-    rm -rf ${tempdir}
+    rm -rf ${temp_dir}
 }
 
 function install_ssh() {
@@ -169,7 +171,17 @@ function set_cpu_governor() {
     local governor=${1:-performance}
     find /sys/devices/system/cpu/ -maxdepth 1 -type d -name "cpu[0-9]*" | \
         sort -V | \
-        xargs -Ipucu echo "w pucu/cpufreq/scaling_governor - - - - ${performance}" > /etc/tmpfiles.d/set-cpu-governor.conf
+        xargs -Ipucu echo "w pucu/cpufreq/scaling_governor - - - - ${governor}" > /etc/tmpfiles.d/set-cpu-governor.conf
+}
+
+function install_fonts() {
+    local user=${SUDO_USER:-${USER}}
+    local -r temp_dir="$(sudo --login --user "${user}" mktemp -d)"
+    local jbmnf_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip"
+    wget ${jbmnf_url} -O ${temp_dir}/$(basename ${jbmnf_url})
+    sudo --login --user "${user}" mkdir -p /home/"${user}"/.local/share/fonts
+    sudo --login --user "${user}" unzip ${temp_dir}/$(basename ${jbmnf_url}) -d /home/"${user}"/.local/share/fonts
+    sudo --login --user "${user}" fc-cache
 }
 
 INSTALL_BASE=false
