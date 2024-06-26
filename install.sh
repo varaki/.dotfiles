@@ -66,7 +66,7 @@ function install_packages() {
     for pkg in ${pkgs[*]}; do
         echo "- ${pkg}"
     done
-    apt install ${pkgs[*]} --yes
+    apt install --no-install-suggests ${pkgs[*]} --yes
 }
 
 function install_desktop() {
@@ -220,7 +220,7 @@ if ${INSTALL_BASE}; then
     install_packages "${BASE[*]}"
     command -v fd || ln -s "$(command -v fdfind)" "$(dirname "$(command -v fdfind)")/fd"
     curl -sSL https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info | tic -x - # Set terminal info for alacritty
-    install_neovim
+    install_neovim && INSTALL_NEOVIM=false
     stow_configs
     enable_silent_login
 fi
