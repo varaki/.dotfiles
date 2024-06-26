@@ -164,6 +164,13 @@ function enable_silent_login() {
     sudo --login --user "${user}" touch /home/"${user}"/.hushlogin
 }
 
+function set_cpu_governor() {
+    local governor=${1:-performance}
+    find /sys/devices/system/cpu/ -maxdepth 1 -type d -name "cpu[0-9]*" | \
+        sort -V | \
+        xargs -Ipucu echo "w pucu/cpufreq/scaling_governor - - - - ${performance}" > /etc/tmpfiles.d/set-cpu-governor.conf
+}
+
 INSTALL_BASE=false
 INSTALL_DESKTOP=false
 INSTALL_KEYD=false
@@ -219,6 +226,7 @@ fi
 
 if ${INSTALL_DESKTOP}; then
     install_desktop "${DESKTOP}"
+    set_cpu_governor
 fi
 
 ${INSTALL_KEYD} && install_keyd
