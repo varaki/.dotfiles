@@ -21,6 +21,7 @@ BASE=(
     "alacritty"
     "build-essential"
     "curl"
+    "dosfstools"
     "fd-find"
     "fonts-recommended"
     "fuse"
