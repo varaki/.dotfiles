@@ -82,7 +82,7 @@ function install_desktop() {
     echo "Installing ${desktop} packages..."
     install_packages "${packages[*]}"
 
-    if [ "${desktop}" == "XFCE"]; then
+    if [ "${desktop}" == "XFCE" ]; then
         ln -s /usr/bin/imv-x11 /usr/bin/imv
     fi
 }
@@ -117,9 +117,9 @@ function install_ssh() {
     sudo --login --user "${user}" openssl enc -aes-256-cbc -pbkdf2 -d -in "${ssh_config_enc}" -out "${temp_dir}"/ssh.tar.gz
     sudo --login --user "${user}" tar xzvf "${temp_dir}"/ssh.tar.gz -C /home/"${user}"
     # Replace git remotes
-    sudo --login --user git -C /home/${user}/.dotfiles remove origin
-    sudo --login --user git -C /home/${user}/.dotfiles remote add codeberg git@codeberg.org:varaki/.dotfiles.git
-    sudo --login --user git -C /home/${user}/.dotfiles remote add github git@github.com:varaki/.dotfiles.git
+    sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote remove origin
+    sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote add codeberg git@codeberg.org:varaki/.dotfiles.git
+    sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote add github git@github.com:varaki/.dotfiles.git
     rm -rf "${temp_dir}"
 }
 
