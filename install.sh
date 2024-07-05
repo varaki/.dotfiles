@@ -90,6 +90,12 @@ function install_desktop() {
     fi
 }
 
+function install_systemd_boot() {
+    apt install systemd-boot --yes
+    apt purge --autoremove grub2-common --yes
+    rm -rf /boot/grub /boot/efi/debian /boot/efi/Linux
+}
+
 function install_neovim() {
     local neovim_url="https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz"
     local neovim_path="/usr/local/bin/nvim-linux64"
