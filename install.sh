@@ -11,6 +11,7 @@ Options:
     --keyd              Install keyd (custom keyboard layout daemon)
     --neovim            Install neovim
     --desktop DESKTOP   Install desktop packages
+    --systemd-boot      Install systemd-boot
 EOF
 )
 
@@ -90,7 +91,7 @@ function install_desktop() {
     fi
 }
 
-function install_systemd_boot() {
+function install_systemdboot() {
     apt install systemd-boot --yes
     apt purge --autoremove grub2-common --yes
     rm -rf /boot/grub /boot/efi/debian /boot/efi/Linux
@@ -195,6 +196,7 @@ INSTALL_DESKTOP=false
 INSTALL_KEYD=false
 INSTALL_NEOVIM=false
 INSTALL_SSH=false
+INSTALL_SYSTEMDBOOT=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
@@ -214,6 +216,9 @@ while [ $# -gt 0 ]; do
             ;;
         --ssh)
             INSTALL_SSH=true
+            ;;
+        --systemd-boot)
+            INSTALL_SYSTEMDBOOT=true
             ;;
         -h | --help)
             echo "${HELP}"
@@ -251,3 +256,4 @@ fi
 ${INSTALL_KEYD} && install_keyd
 ${INSTALL_NEOVIM} && install_neovim
 ${INSTALL_SSH} && install_ssh
+${INSTALL_SYSTEMDBOOT} && install_systemdboot
