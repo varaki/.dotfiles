@@ -61,6 +61,65 @@ XFCE=(
     "imv"
 )
 
+declare -a GNOME
+GNOME=(
+    "adwaita-icon-theme"
+    "at-spi2-core"
+    "baobab"
+    "dconf-cli"
+    "dconf-gsettings-backend"
+    "fonts-cantarell"
+    "gdm3"
+    "gkbd-capplet"
+    "glib-networking"
+    "gnome-backgrounds"
+    "gnome-bluetooth-sendto"
+    "gnome-calculator"
+    "gnome-characters"
+    "gnome-console"
+    "gnome-contacts"
+    "gnome-control-center"
+    "gnome-disk-utility"
+    "gnome-font-viewer"
+    "gnome-keyring"
+    "gnome-logs"
+    "gnome-menus"
+    "gnome-online-accounts"
+    "gnome-session"
+    "gnome-settings-daemon"
+    "gnome-shell"
+    "gnome-shell-extensions"
+    "gnome-sushi"
+    "gnome-system-monitor"
+    "gnome-themes-extra"
+    "gnome-tweaks"
+    "gnome-user-docs"
+    "gnome-user-share"
+    "gsettings-desktop-schemas"
+    "gstreamer1.0-packagekit"
+    "gstreamer1.0-plugins-base"
+    "gstreamer1.0-plugins-good"
+    "gvfs-backends"
+    "gvfs-fuse"
+    "imv"
+    "libatk-adaptor"
+    "libcanberra-pulse"
+    "libglib2.0-bin"
+    "libpam-gnome-keyring"
+    "libproxy1-plugin-gsettings"
+    "libproxy1-plugin-webkit"
+    "librsvg2-common"
+    "nautilus"
+    "network-manager-gnome"
+    "pipewire-audio"
+    "sound-theme-freedesktop"
+    "system-config-printer-common"
+    "system-config-printer-udev"
+    "xdg-desktop-portal-gnome"
+    "yaru-theme-icon"
+    "zenity"
+)
+
 function install_packages() {
     local pkgs=${*}
     echo "Packages:"
@@ -76,6 +135,9 @@ function install_desktop() {
         "XFCE")
             packages=${XFCE[*]}
             ;;
+        "GNOME")
+            packages=${GNOME[*]}
+            ;;
         *)
             echo "Unknown destkop: ${desktop}"
             exit 1
@@ -86,15 +148,32 @@ function install_desktop() {
     echo "Installing fonts..."
     install_fonts
 
-    if [ "${desktop}" == "XFCE" ]; then
-        ln -s /usr/bin/imv-x11 /usr/bin/imv
+    case "${desktop}" in
+        "XFCE")
+            local imvbin="/usr/bin/imv-x11"
+            ;;
+        "GNOME")
+            local imvbin="/usr/bin/imv-wayland"
+            ;;
+    esac
+    if [ ! -z "${imvbin}" ]; then
+        ln -s ${imvbin} /usr/bin/imv
     fi
+}
+
+function disable_bluetooth_autoenable() {
+    sed -i 's|\(AutoEnable=\).*|\1false|g' /etc/bluetooth/main.conf
 }
 
 function install_systemdboot() {
     apt install systemd-boot --yes
     apt purge --autoremove grub2-common --yes
     rm -rf /boot/grub /boot/efi/debian /boot/efi/Linux
+}
+
+function install_pfetch() {
+    wget -q --no-check-certificate https://github.com/dylanaraps/pfetch/raw/master/pfetch -O /usr/local/bin/pfetch
+    chmod +x /usr/local/bin/pfetch
 }
 
 function install_neovim() {
@@ -108,8 +187,8 @@ function install_neovim() {
 
     # Download and install
     local temp_dir=$(mktemp -d)
-    wget ${neovim_url} -O ${temp_dir}/$(basename ${neovim_url})
-    tar xzvf ${temp_dir}/$(basename ${neovim_url}) -C /usr/local/bin/
+    wget -q --no-check-certificate ${neovim_url} -O ${temp_dir}/$(basename ${neovim_url})
+    tar xzf ${temp_dir}/$(basename ${neovim_url}) -C /usr/local/bin/
     ln -s ${neovim_path}/bin/nvim /usr/local/bin/nvim
 
     # Set up .desktop file and icon
@@ -125,7 +204,7 @@ function install_ssh() {
     local -r temp_dir="$(sudo --login --user "${user}" mktemp -d)"
     local ssh_config_enc="/home/${user}/.dotfiles/ssh/ssh.tar.gz.enc"
     sudo --login --user "${user}" openssl enc -aes-256-cbc -pbkdf2 -d -in "${ssh_config_enc}" -out "${temp_dir}"/ssh.tar.gz
-    sudo --login --user "${user}" tar xzvf "${temp_dir}"/ssh.tar.gz -C /home/"${user}"
+    sudo --login --user "${user}" tar xzf "${temp_dir}"/ssh.tar.gz -C /home/"${user}"
     # Replace git remotes
     sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote remove origin
     sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote add codeberg git@codeberg.org:varaki/.dotfiles.git
@@ -154,6 +233,7 @@ function stow_configs() {
 
     declare -a configs
     configs=(
+        "alacritty"
         "git"
         "htop"
         "nvim"
@@ -176,16 +256,16 @@ function enable_silent_login() {
 
 function set_cpu_governor() {
     local governor=${1:-performance}
-    find /sys/devices/system/cpu/ -maxdepth 1 -type d -name "cpu[0-9]*" | \
-        sort -V | \
-        xargs -Ipucu echo "w pucu/cpufreq/scaling_governor - - - - ${governor}" > /etc/tmpfiles.d/set-cpu-governor.conf
+    find /sys/devices/system/cpu/ -maxdepth 1 -type d -name "cpu[0-9]*" |
+        sort -V |
+        xargs -Ipucu echo "w pucu/cpufreq/scaling_governor - - - - ${governor}" >/etc/tmpfiles.d/set-cpu-governor.conf
 }
 
 function install_fonts() {
     local user=${SUDO_USER:-${USER}}
     local -r temp_dir="$(sudo --login --user "${user}" mktemp -d)"
     local jbmnf_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip"
-    wget ${jbmnf_url} -O ${temp_dir}/$(basename ${jbmnf_url})
+    wget -q --no-check-certificate ${jbmnf_url} -O ${temp_dir}/$(basename ${jbmnf_url})
     sudo --login --user "${user}" mkdir -p /home/"${user}"/.local/share/fonts
     sudo --login --user "${user}" unzip ${temp_dir}/$(basename ${jbmnf_url}) -d /home/"${user}"/.local/share/fonts
     sudo --login --user "${user}" fc-cache
@@ -251,6 +331,7 @@ fi
 if ${INSTALL_DESKTOP}; then
     install_desktop "${DESKTOP}"
     set_cpu_governor
+    disable_bluetooth_autoenable
 fi
 
 ${INSTALL_KEYD} && install_keyd
