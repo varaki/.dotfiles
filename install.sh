@@ -69,7 +69,6 @@ GNOME=(
     "dconf-cli"
     "dconf-gsettings-backend"
     "fonts-cantarell"
-    "gdm3"
     "gkbd-capplet"
     "glib-networking"
     "gnome-backgrounds"
@@ -109,6 +108,9 @@ GNOME=(
     "libproxy1-plugin-gsettings"
     "libproxy1-plugin-webkit"
     "librsvg2-common"
+    "lightdm"
+    "lightdm-gtk-greeter"
+    "lightdm-gtk-greeter-settings"
     "nautilus"
     "network-manager-gnome"
     "pipewire-audio"
@@ -130,6 +132,7 @@ function install_packages() {
 }
 
 function install_desktop() {
+    local user=${SUDO_USER:-${USER}}
     local desktop=${1:-XFCE}
     case ${desktop^^} in
         "XFCE")
@@ -154,6 +157,8 @@ function install_desktop() {
             ;;
         "GNOME")
             local imvbin="/usr/bin/imv-wayland"
+            # Disable gnome-tracker
+            sudo --login --user "${user}" systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask
             ;;
     esac
     if [ ! -z "${imvbin}" ]; then
@@ -320,9 +325,11 @@ fi
 
 if ${INSTALL_BASE}; then
     echo "Installing BASE packages..."
+    apt purge --autoremove apt-listchanges --yes
     install_packages "${BASE[*]}"
     command -v fd || ln -s "$(command -v fdfind)" "$(dirname "$(command -v fdfind)")/fd"
     curl -sSL https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info | tic -x - # Set terminal info for alacritty
+    install_pfetch
     install_neovim && INSTALL_NEOVIM=false
     stow_configs
     enable_silent_login
