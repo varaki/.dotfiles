@@ -68,7 +68,7 @@ api.map(',F', 'I');
 api.unmap('I');
 
 // Scroll
-api.map('<Ctrl-f>', 'P'); // full page down
+// api.map('<Ctrl-f>', 'P'); // full page down
 api.unmap('P');
 api.map('<Ctrl-b>', 'U'); // full page up
 api.unmap('U');
