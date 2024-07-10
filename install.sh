@@ -12,6 +12,7 @@ Options:
     --neovim            Install neovim
     --desktop DESKTOP   Install desktop packages
     --systemd-boot      Install systemd-boot
+    --ly                Install ly login manager
 EOF
 )
 
@@ -46,27 +47,30 @@ BASE=(
 
 declare -a XFCE
 XFCE=(
-    "xfdesktop4"
-    "xfwm4"
-    "xfconf"
+    "imv"
+    "mpv"
+    "network-manager-gnome"
+    "pipewire-audio"
+    "thunar"
     "xfce4-notifyd"
     "xfce4-panel"
     "xfce4-power-manager"
     "xfce4-pulseaudio-plugin"
     "xfce4-session"
     "xfce4-settings"
-    "thunar"
-    "pipewire-audio"
-    "network-manager-gnome"
-    "imv"
+    "xfconf"
+    "xfdesktop4"
+    "xfwm4"
 )
 
 declare -a GNOME
 GNOME=(
-    "dconf-editor
+    "dconf-editor"
     "gnome-session"
     "gnome-shell-extension-manager"
     "gnome-tweaks"
+    "imv"
+    "mpv"
     "nautilus"
     "network-manager-gnome"
     "network-manager-gnome"
@@ -109,6 +113,8 @@ function install_desktop() {
             ;;
         "GNOME")
             local imvbin="/usr/bin/imv-wayland"
+            apt purge --autoremove plymouth --yes
+            systemctl disable --now NetworkManager-wait-online ModemManager
             # Disable gnome-tracker
             echo "Run systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask"
             ;;
@@ -126,6 +132,24 @@ function install_systemdboot() {
     apt install systemd-boot --yes
     apt purge --autoremove grub2-common --yes
     rm -rf /boot/grub /boot/efi/debian /boot/efi/Linux
+}
+
+function install_ly() {
+    local tempdir=$(mktemp -d)
+    local zig_version="zig-linux-x86_64-0.12.1"
+    local zig_archive="${zig_version}.tar.xz"
+    local ly_url="https://github.com/fairyglade/ly.git"
+    cd ${tempdir}
+    apt install build-essential libpam0g-dev libxcb-xkb-dev --yes
+    wget -q --no-check-certificate https://ziglang.org/builds/${zig_archive}
+    tar xJf ${zig_archive}
+    git clone ${ly_url}
+    cd ${tempdir}/ly
+    git checkout v1.0.0
+    ${tempdir}/${zig_version}/zig build installsystemd
+    systemctl disable gdm3
+    apt purge --autoremove gdm3
+    systemctl enable ly
 }
 
 function install_pfetch() {
@@ -234,6 +258,7 @@ INSTALL_KEYD=false
 INSTALL_NEOVIM=false
 INSTALL_SSH=false
 INSTALL_SYSTEMDBOOT=false
+INSTALL_LY=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
@@ -256,6 +281,9 @@ while [ $# -gt 0 ]; do
             ;;
         --systemd-boot)
             INSTALL_SYSTEMDBOOT=true
+            ;;
+        --ly)
+            INSTALL_LY=true
             ;;
         -h | --help)
             echo "${HELP}"
@@ -297,3 +325,4 @@ ${INSTALL_KEYD} && install_keyd
 ${INSTALL_NEOVIM} && install_neovim
 ${INSTALL_SSH} && install_ssh
 ${INSTALL_SYSTEMDBOOT} && install_systemdboot
+${INSTALL_LY} && install_ly
