@@ -63,61 +63,15 @@ XFCE=(
 
 declare -a GNOME
 GNOME=(
-    "adwaita-icon-theme"
-    "at-spi2-core"
-    "baobab"
-    "dconf-cli"
-    "dconf-gsettings-backend"
-    "fonts-cantarell"
-    "gdm3"
-    "gkbd-capplet"
-    "glib-networking"
-    "gnome-backgrounds"
-    "gnome-bluetooth-sendto"
-    "gnome-calculator"
-    "gnome-characters"
-    "gnome-console"
-    "gnome-contacts"
-    "gnome-control-center"
-    "gnome-disk-utility"
-    "gnome-font-viewer"
-    "gnome-keyring"
-    "gnome-logs"
-    "gnome-menus"
-    "gnome-online-accounts"
+    "dconf-editor
     "gnome-session"
-    "gnome-settings-daemon"
-    "gnome-shell"
-    "gnome-shell-extensions"
-    "gnome-sushi"
-    "gnome-system-monitor"
-    "gnome-themes-extra"
+    "gnome-shell-extension-manager"
     "gnome-tweaks"
-    "gnome-user-docs"
-    "gnome-user-share"
-    "gsettings-desktop-schemas"
-    "gstreamer1.0-packagekit"
-    "gstreamer1.0-plugins-base"
-    "gstreamer1.0-plugins-good"
-    "gvfs-backends"
-    "gvfs-fuse"
-    "imv"
-    "libatk-adaptor"
-    "libcanberra-pulse"
-    "libglib2.0-bin"
-    "libpam-gnome-keyring"
-    "libproxy1-plugin-gsettings"
-    "libproxy1-plugin-webkit"
-    "librsvg2-common"
     "nautilus"
     "network-manager-gnome"
+    "network-manager-gnome"
     "pipewire-audio"
-    "sound-theme-freedesktop"
-    "system-config-printer-common"
-    "system-config-printer-udev"
-    "xdg-desktop-portal-gnome"
     "yaru-theme-icon"
-    "zenity"
 )
 
 function install_packages() {
@@ -156,7 +110,7 @@ function install_desktop() {
         "GNOME")
             local imvbin="/usr/bin/imv-wayland"
             # Disable gnome-tracker
-            sudo --login --user "${user}" systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask
+            echo "Run systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask"
             ;;
     esac
     if [ ! -z "${imvbin}" ]; then
