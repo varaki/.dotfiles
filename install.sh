@@ -190,6 +190,7 @@ function install_ssh() {
     sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote remove origin
     sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote add codeberg git@codeberg.org:varaki/.dotfiles.git
     sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote add github git@github.com:varaki/.dotfiles.git
+    sudo --login --user "${user}" git -C /home/${user}/.dotfiles branch --set-upstream-to=codeberg/main
     rm -rf "${temp_dir}"
 }
 
