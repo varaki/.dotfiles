@@ -56,8 +56,8 @@ user_pref("network.ssl_tokens_cache_capacity", 32768);
 
 /** DNS over HTTPS ***/
 user_pref("network.trr.mode", 2);
-user_pref("network.trr.uri", "https://dnsforge.de/dns-query");
-user_pref("network.trr.custom_uri", "https://dnsforge.de/dns-query");
+user_pref("network.trr.uri", "https://freedns.controld.com/x-hagezi-proplus");
+user_pref("network.trr.custom_uri", "https://freedns.controld.com/x-hagezi-proplus");
 user_pref("network.trr.excluded-domains", "ericsson.com,ericsson.se,ericsson.net,opentext.eu,ericy.com,successfactors.eu");
 
 /****************************************************************************
@@ -211,6 +211,7 @@ user_pref("findbar.highlightAll", true);
 user_pref("middlemouse.contentLoadURL", false);
 user_pref("browser.privatebrowsing.enable-new-indicator", false);
 user_pref("browser.uidensity", 1);
+user_pref("apz.overscroll.enabled", false);
 
 /** FULLSCREEN ***/
 user_pref("full-screen-api.transition-duration.enter", "0 0");
