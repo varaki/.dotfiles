@@ -1,0 +1,10 @@
+[Unit]
+Description=Setup zram device for user's .cache directory
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/zram-user-cache
+
+[Install]
+WantedBy=multi-user.target

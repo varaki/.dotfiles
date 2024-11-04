@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+USER=${1:-varaki}
+
+modprobe zram
+ZRAMDEV=$(zramctl --find \
+    --algorithm zstd \
+    --size "$(($(grep -Po 'MemTotal:\s*\K\d+' /proc/meminfo)/2))KiB"
+)
+mkfs.ext4 -m 1 ${ZRAMDEV}
+mount -o rw,noatime ${ZRAMDEV} /home/${USER}/.cache
+chown ${USER}:${USER} /home/${USER}/.cache
