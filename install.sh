@@ -78,6 +78,13 @@ GNOME=(
     "yaru-theme-icon"
 )
 
+declare -a PRO_AUDIO
+PRO_AUDIO=(
+    "pipewire-audio-client-libraries"
+    "ardour"
+    # "helvum"
+)
+
 function install_packages() {
     local pkgs=${*}
     echo "Packages:"
@@ -91,16 +98,16 @@ function install_desktop() {
     local user=${SUDO_USER:-${USER}}
     local desktop=${1:-XFCE}
     case ${desktop^^} in
-        "XFCE")
-            packages=${XFCE[*]}
-            ;;
-        "GNOME")
-            packages=${GNOME[*]}
-            ;;
-        *)
-            echo "Unknown destkop: ${desktop}"
-            exit 1
-            ;;
+    "XFCE")
+        packages=${XFCE[*]}
+        ;;
+    "GNOME")
+        packages=${GNOME[*]}
+        ;;
+    *)
+        echo "Unknown destkop: ${desktop}"
+        exit 1
+        ;;
     esac
     echo "Installing ${desktop} packages..."
     install_packages "${packages[*]}"
@@ -108,20 +115,26 @@ function install_desktop() {
     install_fonts
 
     case "${desktop}" in
-        "XFCE")
-            local imvbin="/usr/bin/imv-x11"
-            ;;
-        "GNOME")
-            local imvbin="/usr/bin/imv-wayland"
-            apt purge --autoremove plymouth --yes
-            systemctl disable --now NetworkManager-wait-online ModemManager
-            # Disable gnome-tracker
-            echo "Run systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask"
-            ;;
+    "XFCE")
+        local imvbin="/usr/bin/imv-x11"
+        ;;
+    "GNOME")
+        local imvbin="/usr/bin/imv-wayland"
+        apt purge --autoremove plymouth --yes
+        systemctl disable --now NetworkManager-wait-online ModemManager
+        # Disable gnome-tracker
+        echo "Run systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask"
+        ;;
     esac
     if [ ! -z "${imvbin}" ]; then
         ln -s ${imvbin} /usr/bin/imv
     fi
+}
+
+function install_pro_audio() {
+    install_packages ${PRO_AUDIO[*]}
+    cp -v /usr/share/doc/pipewire/examples/ld.so.conf.d/pipewire-jack-*.conf /etc/ld.so.conf.d/
+    ldconfig
 }
 
 function disable_bluetooth_autoenable() {
@@ -255,6 +268,7 @@ function install_fonts() {
 
 INSTALL_BASE=false
 INSTALL_DESKTOP=false
+INSTALL_PRO_AUDIO=false
 INSTALL_KEYD=false
 INSTALL_NEOVIM=false
 INSTALL_SSH=false
@@ -263,38 +277,41 @@ INSTALL_LY=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
-        --base)
-            INSTALL_BASE=true
-            ;;
-        --desktop)
-            INSTALL_DESKTOP=true
-            shift
-            DESKTOP=${1}
-            ;;
-        --keyd)
-            INSTALL_KEYD=true
-            ;;
-        --neovim)
-            INSTALL_NEOVIM=true
-            ;;
-        --ssh)
-            INSTALL_SSH=true
-            ;;
-        --systemd-boot)
-            INSTALL_SYSTEMDBOOT=true
-            ;;
-        --ly)
-            INSTALL_LY=true
-            ;;
-        -h | --help)
-            echo "${HELP}"
-            exit
-            ;;
-        *)
-            echo "Unkown option: ${1}"
-            echo "${HELP}"
-            exit 1
-            ;;
+    --base)
+        INSTALL_BASE=true
+        ;;
+    --desktop)
+        INSTALL_DESKTOP=true
+        shift
+        DESKTOP=${1}
+        ;;
+    --pro-audio)
+        INSTALL_PRO_AUDIO=true
+        ;;
+    --keyd)
+        INSTALL_KEYD=true
+        ;;
+    --neovim)
+        INSTALL_NEOVIM=true
+        ;;
+    --ssh)
+        INSTALL_SSH=true
+        ;;
+    --systemd-boot)
+        INSTALL_SYSTEMDBOOT=true
+        ;;
+    --ly)
+        INSTALL_LY=true
+        ;;
+    -h | --help)
+        echo "${HELP}"
+        exit
+        ;;
+    *)
+        echo "Unkown option: ${1}"
+        echo "${HELP}"
+        exit 1
+        ;;
     esac
     shift
 done
@@ -322,6 +339,7 @@ if ${INSTALL_DESKTOP}; then
     disable_bluetooth_autoenable
 fi
 
+${INSTALL_PRO_AUDIO} && install_pro_audio
 ${INSTALL_KEYD} && install_keyd
 ${INSTALL_NEOVIM} && install_neovim
 ${INSTALL_SSH} && install_ssh
