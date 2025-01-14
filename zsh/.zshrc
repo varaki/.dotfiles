@@ -175,7 +175,7 @@ alias decrypt="crypt decrypt $*"
 # Send keys to tmux with delay
 delayed_send_keys() {
     local keys=${*}
-    local delay=0.5
+    local delay=0.75
     sleep "${delay}"
 
     # Separate "Enter" from the keys as it is not getting interpreted otherwise
