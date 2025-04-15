@@ -20,7 +20,6 @@ require("lazy").setup({
   -- Import plugins
   { import = "plugins" },
   { import = "plugins.lsp" },
-  { import = "plugins.ai" },
 }, {
   -- Plugin manager options
   install = {
