@@ -116,13 +116,13 @@ MOZILLA_REPO=false
 
 while [ $# -ne 0 ]; do
     case "${1}" in
-        -m | --enable-mozilla-repo)
-            MOZILLA_REPO=true
-            ;;
-        *)
-            echo "Invalid parameter: ${1}"
-            exit 1
-            ;;
+    -m | --enable-mozilla-repo)
+        MOZILLA_REPO=true
+        ;;
+    *)
+        echo "Invalid parameter: ${1}"
+        exit 1
+        ;;
     esac
     shift
 done

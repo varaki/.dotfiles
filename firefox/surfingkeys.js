@@ -99,3 +99,7 @@ api.map('Pp', 'cc');
 api.unmap('cc');
 api.map(';y', 'ya');
 api.unmap('ya');
+
+// Disable Ctrl+a and Ctrl+e
+api.iunmap("<Ctrl-a>");
+api.iunmap("<Ctrl-e>");
