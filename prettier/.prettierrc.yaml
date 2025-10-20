@@ -1,0 +1,15 @@
+tabWidth: 2
+useTabs: false
+overrides:
+  - files: ["*.json", "*.jsonc"]
+    options:
+      parser: json
+      tabWidth: 2
+  - files: ["*.yaml", "*.yml"]
+    options:
+      parser: yaml
+      tabWidth: 2
+  - files: ["*.toml"]
+    options:
+      parser: toml
+      tabWidth: 2
