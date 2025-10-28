@@ -69,6 +69,7 @@ GNOME=(
     "gnome-session"
     "gnome-shell-extension-manager"
     "gnome-tweaks"
+    "gnome-console"
     "imv"
     "mpv"
     "nautilus"
