@@ -25,6 +25,7 @@ BASE=(
     "build-essential"
     "curl"
     "dosfstools"
+    "exfatprogs"
     "fd-find"
     "fonts-recommended"
     "fuse"
