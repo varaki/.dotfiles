@@ -6,13 +6,14 @@ Usage:
     $0 [OPTIONS]
 
 Options:
-    --base              Install base packages
-    --ssh               Configure ssh
-    --keyd              Install keyd (custom keyboard layout daemon)
-    --neovim            Install neovim
-    --desktop DESKTOP   Install desktop packages
-    --systemd-boot      Install systemd-boot
-    --ly                Install ly login manager
+    --base                  Install base packages
+    --unattended-upgrades   Set up unattended-upgrades
+    --ssh                   Configure ssh
+    --keyd                  Install keyd (custom keyboard layout daemon)
+    --neovim                Install neovim
+    --desktop DESKTOP       Install desktop packages
+    --systemd-boot          Install systemd-boot
+    --ly                    Install ly login manager
 EOF
 )
 
@@ -43,6 +44,71 @@ BASE=(
     "xdg-utils"
     "zip"
     "zsh"
+)
+
+declare -a UNATTENDED_UPGRADES
+UNATTENDED_UPGRADES=(
+    "unattended-upgrades"
+    "apt-listchanges"
+)
+
+AUTO_UPGRADES_CONTENT=$(
+    cat <<EOF
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutoCleanInterval "1";
+APT::Periodic::Unattended-Upgrade "1";
+EOF
+)
+
+UNATTENDED_UPGRADES_CONTENT=$(
+    cat <<EOF
+Unattended-Upgrade::Origins-Pattern {
+        "origin=Debian,codename=${distro_codename}-updates";
+        "origin=Debian,codename=${distro_codename},label=Debian";
+        "origin=Debian,codename=${distro_codename},label=Debian-Security";
+        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+        "o=Debian Backports,n=${distro_codename}-backports,l=Debian Backports";
+        // Mozilla
+        "o=namespaces/moz-fx-productdelivery-pr-38b5/repositories/mozilla,a=mozilla,n=mozilla,l=namespaces/moz-fx-productdelivery-pr-38b5/repositories/mozilla,c=main"
+        // Spotify
+        "o=Spotify LTD,a=stable,n=stable,l=Spotify Public Repository,c=non-free"
+};
+Unattended-Upgrade::Package-Blacklist {
+};
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+EOF
+)
+
+APT_DAILY_TIMER=$(
+    cat <<EOF
+[Unit]
+Description=Daily apt download activities
+
+[Timer]
+OnBootSec=2m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+)
+
+APT_DAILY_UPGRADE_TIMER=$(
+    cat <<EOF
+[Unit]
+Description=Daily apt upgrade and clean activities
+After=apt-daily.timer
+
+[Timer]
+OnBootSec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
 )
 
 declare -a XFCE
@@ -93,6 +159,36 @@ function install_packages() {
         echo "- ${pkg}"
     done
     apt install --no-install-suggests ${pkgs[*]} --yes
+}
+
+function install_unattended_upgrades() {
+    echo "Packages:"
+    for pkg in ${pkgs[*]}; do
+        echo "- ${pkg}"
+    done
+    apt install --no-install-suggests --no-install-recommends ${UNATTENDED_UPGRADES[*]} --yes
+
+    # Configure unattended upgrades
+    dpkg-reconfigure -plow unattended-upgrades
+    echo "${AUTO_UPGRADES_CONTENT}" | tee /etc/apt/apt.conf.d/20auto-upgrades
+
+    # Configure timers
+    echo "${APT_DAILY_TIMER}" | tee /usr/lib/systemd/system/apt-daily.timer
+    echo "${APT_DAILY_UPGRADE_TIMER}" | tee /usr/lib/systemd/system/apt-daily-upgrade.timer
+    systemctl daemon-reload
+    systemctl enable \
+        apt-daily.timer \
+        apt-daily-upgrade.timer
+    systemctl restart \
+        apt-daily.timer \
+        apt-daily-upgrade.timer
+
+    # List timers
+    systemctl list-timers apt-daily\* --all
+
+    # Show example config of /etc/apt/apt.conf.d/50unattended-upgrades
+    echo "Example configuration of /etc/apt/apt.conf.d/50unattended-upgrades:"
+    echo "${UNATTENDED_UPGRADES_CONTENT}"
 }
 
 function install_desktop() {
@@ -268,6 +364,7 @@ function install_fonts() {
 }
 
 INSTALL_BASE=false
+INSTALL_UNATTENDED_UPGRADES=false
 INSTALL_DESKTOP=false
 INSTALL_PRO_AUDIO=false
 INSTALL_KEYD=false
@@ -280,6 +377,9 @@ while [ $# -gt 0 ]; do
     case ${1} in
     --base)
         INSTALL_BASE=true
+        ;;
+    --unattended-upgrades)
+        INSTALL_UNATTENDED_UPGRADES=true
         ;;
     --desktop)
         INSTALL_DESKTOP=true
@@ -332,6 +432,10 @@ if ${INSTALL_BASE}; then
     install_neovim && INSTALL_NEOVIM=false
     stow_configs
     enable_silent_login
+fi
+
+if ${INSTALL_UNATTENDED_UPGRADES}; then
+    install_unattended_upgrades
 fi
 
 if ${INSTALL_DESKTOP}; then
