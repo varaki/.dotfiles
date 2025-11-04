@@ -282,7 +282,7 @@ function install_pfetch() {
 }
 
 function install_neovim() {
-    local neovim_url="https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz"
+    local neovim_url="https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.tar.gz"
     local neovim_path="/usr/local/bin/nvim-linux64"
     local neovim_bin="/usr/local/bin/nvim"
 
