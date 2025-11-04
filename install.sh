@@ -112,6 +112,19 @@ WantedBy=timers.target
 EOF
 )
 
+declare -a VIBER_DEPENDENCIES
+VIBER_DEPENDENCIES=(
+    "gstreamer1.0-plugins-ugly"
+    "liba52-0.7.4"
+    "libmpeg2-4"
+    "libsidplay1v5"
+    "gstreamer1.0-libav"
+    "gstreamer1.0-pulseaudio"
+    "gstreamer1.0-libav"
+    "libxcb-xinput0"
+    "libevent-2.1-7t64"
+)
+
 declare -a XFCE
 XFCE=(
     "imv"
@@ -364,6 +377,14 @@ function install_fonts() {
     sudo --login --user "${user}" fc-cache
 }
 
+function install_viber() {
+    local viber_deb_url="https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb"
+    local -r temp_dir="$(mktemp -d)"
+    wget --no-check-certificate ${viber_deb_url} -O ${temp_dir}/$(basename ${viber_deb_url})
+    apt install --no-install-suggests --no-install-recommends ${VIBER_DEPENDENCIES[*]} --yes
+    dpkg -i ${temp_dir}/viber.deb
+}
+
 INSTALL_BASE=false
 INSTALL_UNATTENDED_UPGRADES=false
 INSTALL_DESKTOP=false
@@ -373,6 +394,7 @@ INSTALL_NEOVIM=false
 INSTALL_SSH=false
 INSTALL_SYSTEMDBOOT=false
 INSTALL_LY=false
+INSTALL_VIBER=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
@@ -404,6 +426,9 @@ while [ $# -gt 0 ]; do
         ;;
     --ly)
         INSTALL_LY=true
+        ;;
+    --viber)
+        INSTALL_VIBER=true
         ;;
     -h | --help)
         echo "${HELP}"
@@ -451,3 +476,4 @@ ${INSTALL_NEOVIM} && install_neovim
 ${INSTALL_SSH} && install_ssh
 ${INSTALL_SYSTEMDBOOT} && install_systemdboot
 ${INSTALL_LY} && install_ly
+${INSTALL_VIBER} && install_viber
