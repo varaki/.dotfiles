@@ -124,6 +124,14 @@ export FZF_CTRL_T_COMMAND="fd --unrestricted"
 export FZF_ALT_C_COMMAND="fd --unrestricted --type d"
 
 # Aliases
+# Set bat/batcat as a replacement for cat
+cmds=(batcat bat)
+for cmd in "${cmds[@]}"; do
+    if command -v ${cmd} >& /dev/null; then
+        alias cat="${cmd}"
+        break
+    fi
+done
 alias dots="cd ${HOME}/.dotfiles"
 alias less="less -i"
 alias ls="ls --color=tty"
@@ -206,18 +214,18 @@ plugins=(
 for plugin url in "${(@kv)plugins}"; do
     current_plugin_dir="${ZSH_PLUGINS_DIR}/${plugin}"
     if [ ! -d ${current_plugin_dir} ]; then
-	echo "Downloading zsh plugin: ${plugin}..."
+    echo "Downloading zsh plugin: ${plugin}..."
 
         if [[ "${url}" == *"raw.githubusercontent.com"* ]]; then
-	    # Single plugin
-	    mkdir -p "${current_plugin_dir}"
-	    wget --quiet --no-check-certificate "${url}" -O "${current_plugin_dir}/$(basename ${url})"
-	else
-	    # Plugin repository
-	    rm -rf "${current_plugin_dir}"
-	    mkdir -p "${ZSH_PLUGINS_DIR}"
-	    git -C "${ZSH_PLUGINS_DIR}" clone --quiet "${url}"
-	fi
+        # Single plugin
+        mkdir -p "${current_plugin_dir}"
+        wget --quiet --no-check-certificate "${url}" -O "${current_plugin_dir}/$(basename ${url})"
+    else
+        # Plugin repository
+        rm -rf "${current_plugin_dir}"
+        mkdir -p "${ZSH_PLUGINS_DIR}"
+        git -C "${ZSH_PLUGINS_DIR}" clone --quiet "${url}"
+    fi
     fi
 done
 
