@@ -370,7 +370,7 @@ function set_cpu_governor() {
 function install_fonts() {
     local user=${SUDO_USER:-${USER}}
     local -r temp_dir="$(sudo --login --user "${user}" mktemp -d)"
-    local jbmnf_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip"
+    local jbmnf_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
     wget -q --no-check-certificate ${jbmnf_url} -O ${temp_dir}/$(basename ${jbmnf_url})
     sudo --login --user "${user}" mkdir -p /home/"${user}"/.local/share/fonts
     sudo --login --user "${user}" unzip ${temp_dir}/$(basename ${jbmnf_url}) -d /home/"${user}"/.local/share/fonts
