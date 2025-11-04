@@ -371,9 +371,9 @@ function install_fonts() {
     local user=${SUDO_USER:-${USER}}
     local -r temp_dir="$(sudo --login --user "${user}" mktemp -d)"
     local jbmnf_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
-    wget -q --no-check-certificate ${jbmnf_url} -O ${temp_dir}/$(basename ${jbmnf_url})
+    wget --no-check-certificate ${jbmnf_url} -O ${temp_dir}/$(basename ${jbmnf_url})
     sudo --login --user "${user}" mkdir -p /home/"${user}"/.local/share/fonts
-    sudo --login --user "${user}" unzip ${temp_dir}/$(basename ${jbmnf_url}) -d /home/"${user}"/.local/share/fonts
+    sudo --login --user "${user}" unzip -o ${temp_dir}/$(basename ${jbmnf_url}) -d /home/"${user}"/.local/share/fonts
     sudo --login --user "${user}" fc-cache
 }
 
@@ -395,6 +395,7 @@ INSTALL_SSH=false
 INSTALL_SYSTEMDBOOT=false
 INSTALL_LY=false
 INSTALL_VIBER=false
+INSTALL_FONTS=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
@@ -429,6 +430,9 @@ while [ $# -gt 0 ]; do
         ;;
     --viber)
         INSTALL_VIBER=true
+        ;;
+    --fonts)
+        INSTALL_FONTS=true
         ;;
     -h | --help)
         echo "${HELP}"
@@ -477,3 +481,4 @@ ${INSTALL_SSH} && install_ssh
 ${INSTALL_SYSTEMDBOOT} && install_systemdboot
 ${INSTALL_LY} && install_ly
 ${INSTALL_VIBER} && install_viber
+${INSTALL_FONTS} && install_fonts
