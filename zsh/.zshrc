@@ -155,6 +155,9 @@ alias rt="tmux -L rt-socket attach -t rt-session"
 alias dc="docker-compose"
 alias cleardlogs="sudo sh -c 'truncate -s 0 /var/lib/docker/containers/*/*-json.log'"
 
+# Prevent screen to turn off while playing media with mpv in case of gnome
+[[ "$XDG_SESSION_DESKTOP" == "gnome" ]] && alias mpv="gnome-session-inhibit mpv"
+
 [ -e ${HOME}/.zshrc-otp-auth ] && source ${HOME}/.zshrc-otp-auth
 
 # Encrypt and decrypt with openssl
