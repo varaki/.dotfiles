@@ -80,6 +80,7 @@ Unattended-Upgrade::Package-Blacklist {
 Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
 Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::OnlyOnACPower "false";
 EOF
 )
 
@@ -185,6 +186,11 @@ function install_unattended_upgrades() {
     # Configure unattended upgrades
     dpkg-reconfigure -plow unattended-upgrades
     echo "${AUTO_UPGRADES_CONTENT}" | tee /etc/apt/apt.conf.d/20auto-upgrades
+
+    # Configure systemd services
+    sed 's%\(ConditionACPower=\).*%\1%g' -i \
+        /usr/lib/systemd/system/apt-daily.service \
+        /usr/lib/systemd/system/apt-daily-upgrade.service
 
     # Configure timers
     echo "${APT_DAILY_TIMER}" | tee /usr/lib/systemd/system/apt-daily.timer
