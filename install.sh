@@ -21,21 +21,27 @@ NEOVIM_DESKTOP_XZ_ARCHIVE="/Td6WFoAAATm1rRGBMCQGoCgASEBFgAAAAAAAHoeOfTgT/8NCF0AO
 
 declare -a BASE
 BASE=(
+    "7zip"
     "alacritty"
     "build-essential"
     "curl"
     "dosfstools"
     "exfatprogs"
     "fd-find"
+    "ffmpeg"
     "fonts-recommended"
     "fuse"
+    "fzf"
     "fzf"
     "git"
     "gpg"
     "htop"
+    "imagemagick"
+    "jq"
     "kbd"
     "locales"
     "pigz"
+    "poppler-utils"
     "python3-venv"
     "ripgrep"
     "stow"
@@ -44,6 +50,7 @@ BASE=(
     "wget"
     "xdg-utils"
     "zip"
+    "zoxide"
     "zsh"
 )
 
