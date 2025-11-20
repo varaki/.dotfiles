@@ -236,6 +236,10 @@ keymap = [
     ], run = "cd ~/Downloads", desc = "Go ~/Downloads" },
     { on = [
         "g",
+        "t",
+    ], run = "cd /tmp", desc = "Go /tmp" },
+    { on = [
+        "g",
         "<Space>",
     ], run = "cd --interactive", desc = "Jump interactively" },
     { on = [
