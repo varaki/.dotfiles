@@ -356,7 +356,9 @@ function stow_configs() {
         "git"
         "htop"
         "nvim"
+        "ripgrep"
         "tmux"
+        "yazi"
         "zsh"
     )
     for config in "${configs[@]}"; do
@@ -398,6 +400,16 @@ function install_viber() {
     dpkg -i ${temp_dir}/viber.deb
 }
 
+function install_yazi() {
+    local yazi_zip_url="https://github.com/sxyazi/yazi/releases/download/v25.5.31/yazi-x86_64-unknown-linux-musl.zip"
+    local -r temp_dir="$(mktemp -d)"
+    wget --no-check-certificate ${yazi_zip_url} -O ${temp_dir}/$(basename ${yazi_zip_url})
+    unzip ${temp_dir}/$(basename ${yazi_zip_url}) -d ${temp_dir}
+    for bin in $(find ${temp_dir} -name "yazi" -o -name "ya"); do
+        cp -v ${bin} /usr/local/bin
+    done
+}
+
 INSTALL_BASE=false
 INSTALL_UNATTENDED_UPGRADES=false
 INSTALL_DESKTOP=false
@@ -409,6 +421,7 @@ INSTALL_SYSTEMDBOOT=false
 INSTALL_LY=false
 INSTALL_VIBER=false
 INSTALL_FONTS=false
+INSTALL_YAZI=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
@@ -446,6 +459,9 @@ while [ $# -gt 0 ]; do
         ;;
     --fonts)
         INSTALL_FONTS=true
+        ;;
+    --yazi)
+        INSTALL_YAZI=true
         ;;
     -h | --help)
         echo "${HELP}"
@@ -495,3 +511,4 @@ ${INSTALL_SYSTEMDBOOT} && install_systemdboot
 ${INSTALL_LY} && install_ly
 ${INSTALL_VIBER} && install_viber
 ${INSTALL_FONTS} && install_fonts
+${INSTALL_YAZI} && install_yazi
