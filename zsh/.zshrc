@@ -41,6 +41,13 @@ fi
 # Append asdf completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
 
+# Set terminal info for alacritty
+terminfo_alacritty() {
+    if ! infocmp alacritty >& /dev/null; then
+        curl -sSL https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info | tic -x -
+    fi
+}
+
 # Download utilities
 download_and_extract() {
     local url=${1}
