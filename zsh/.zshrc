@@ -15,7 +15,7 @@ export VISUAL="nvim"
 export SYSTEMD_EDITOR="nvim"
 
 # Path
-export PATH=${HOME}/.local/bin:/usr/sbin:${HOME}/go/bin:/usr/local/go/bin:${PATH}
+export PATH=${HOME}/.local/bin:/usr/sbin:/usr/local/bin:/usr/games/:${HOME}/go/bin:/usr/local/go/bin:${PATH}
 
 # Additional zsh configs
 export LOCAL_BIN_DIR="${HOME}/.local/bin"
@@ -275,4 +275,11 @@ if [[ "${MACHINE}" == "sero"* ]]; then
 fi
 
 # Run pfetch
-pfetch
+if command -v lolcat >& /dev/null; then
+    pfetch | lolcat \
+        --force \
+        --truecolor \
+        --seed 55
+else
+    pfetch
+fi
