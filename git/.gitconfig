@@ -1,10 +1,13 @@
 [user]
-    email = varady.akos@gmail.com
     name = varaki
+    email = varady.akos@gmail.com
 [credential]
     helper = store
 [core]
+    pager = less -iFRSX
     editor = nvim
+[color]
+    ui = true
 [alias]
     co = checkout
     cobr = checkout -b
@@ -14,14 +17,17 @@
     bra = branch -avv
     ci = commit
     st = status
-    lg = log --graph --date=format:'%Y-%m-%d %H:%M' --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit
+    last = log -1 HEAD
+    repo = remote show origin
+    lg = log --color --oneline --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%ci) %C(bold blue)<%an>%Creset %C(cyan)(%G?)%Creset%C(yellow)%d%Creset'
     tree = log --graph --all --pretty=oneline --decorate
     find = branch --remote --contains
     stal = stash list
     stap = stash pop
-[pager]
-    grep = false
-    branch = false
+    showfiles = show --pretty="" --name-only
+    cdiff = diff --cached
+    wdiff = diff --ignore-all-space
+    padd = add -p
 [diff]
     tool = nvim -d
     colorMoved = zebra
