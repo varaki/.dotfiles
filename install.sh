@@ -180,18 +180,18 @@ PRO_AUDIO=(
 function install_packages() {
     local pkgs=${*}
     echo "Packages:"
-    for pkg in ${pkgs[*]}; do
+    for pkg in "${pkgs[@]}"; do
         echo "- ${pkg}"
     done
-    apt install --no-install-suggests ${pkgs[*]} --yes
+    apt install --no-install-suggests "${pkgs[@]}" --yes
 }
 
 function install_unattended_upgrades() {
     echo "Packages:"
-    for pkg in ${pkgs[*]}; do
+    for pkg in "${pkgs[@]}"; do
         echo "- ${pkg}"
     done
-    apt install --no-install-suggests --no-install-recommends ${UNATTENDED_UPGRADES[*]} --yes
+    apt install --no-install-suggests --no-install-recommends "${UNATTENDED_UPGRADES[@]}" --yes
 
     # Configure unattended upgrades
     dpkg-reconfigure -plow unattended-upgrades
@@ -253,13 +253,13 @@ function install_desktop() {
         echo "Run systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask"
         ;;
     esac
-    if [ ! -z "${imvbin}" ]; then
-        ln -s ${imvbin} /usr/bin/imv
+    if [ -n "${imvbin}" ]; then
+        ln -s "${imvbin}" /usr/bin/imv
     fi
 }
 
 function install_pro_audio() {
-    install_packages ${PRO_AUDIO[*]}
+    install_packages "${PRO_AUDIO[@]}"
     cp -v /usr/share/doc/pipewire/examples/ld.so.conf.d/pipewire-jack-*.conf /etc/ld.so.conf.d/
     ldconfig
 }
@@ -279,14 +279,14 @@ function install_ly() {
     local zig_version="zig-linux-${ARCH}-0.12.1"
     local zig_archive="${zig_version}.tar.xz"
     local ly_url="https://github.com/fairyglade/ly.git"
-    cd ${tempdir}
+    cd "${tempdir}" || exit
     apt install build-essential libpam0g-dev libxcb-xkb-dev --yes
-    wget -q --no-check-certificate https://ziglang.org/builds/${zig_archive}
-    tar xJf ${zig_archive}
+    wget -q --no-check-certificate https://ziglang.org/builds/"${zig_archive}"
+    tar xJf "${zig_archive}"
     git clone ${ly_url}
-    cd ${tempdir}/ly
+    cd "${tempdir}"/ly || exit
     git checkout v1.0.0
-    ${tempdir}/${zig_version}/zig build installsystemd
+    "${tempdir}"/"${zig_version}"/zig build installsystemd
     systemctl disable gdm3
     apt purge --autoremove gdm3
     systemctl enable ly
@@ -308,8 +308,8 @@ function install_neovim() {
 
     # Download and install
     local temp_dir=$(mktemp -d)
-    wget -q --no-check-certificate ${neovim_url} -O ${temp_dir}/$(basename ${neovim_url})
-    tar xzf ${temp_dir}/$(basename ${neovim_url}) -C /usr/local/bin/
+    wget -q --no-check-certificate "${neovim_url}" -O "${temp_dir}"/"$(basename "${neovim_url}")"
+    tar xzf "${temp_dir}/$(basename "${neovim_url}")" -C /usr/local/bin/
     ln -s ${neovim_path}/bin/nvim /usr/local/bin/nvim
 
     # Set up .desktop file and icon
@@ -317,7 +317,7 @@ function install_neovim() {
 
     # Remove regular vim
     apt purge --autoremove vim* --yes >&/dev/null
-    rm -rf ${temp_dir}
+    rm -rf "${temp_dir}"
 }
 
 function install_ssh() {
@@ -327,10 +327,10 @@ function install_ssh() {
     sudo --login --user "${user}" openssl enc -aes-256-cbc -pbkdf2 -d -in "${ssh_config_enc}" -out "${temp_dir}"/ssh.tar.gz
     sudo --login --user "${user}" tar xzf "${temp_dir}"/ssh.tar.gz -C /home/"${user}"
     # Replace git remotes
-    sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote remove origin
-    sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote add codeberg git@codeberg.org:varaki/.dotfiles.git
-    sudo --login --user "${user}" git -C /home/${user}/.dotfiles remote add github git@github.com:varaki/.dotfiles.git
-    sudo --login --user "${user}" git -C /home/${user}/.dotfiles branch --set-upstream-to=codeberg/main
+    sudo --login --user "${user}" git -C /home/"${user}"/.dotfiles remote remove origin
+    sudo --login --user "${user}" git -C /home/"${user}"/.dotfiles remote add codeberg git@codeberg.org:varaki/.dotfiles.git
+    sudo --login --user "${user}" git -C /home/"${user}"/.dotfiles remote add github git@github.com:varaki/.dotfiles.git
+    sudo --login --user "${user}" git -C /home/"${user}"/.dotfiles branch --set-upstream-to=codeberg/main
     rm -rf "${temp_dir}"
 }
 
@@ -389,27 +389,27 @@ function install_fonts() {
     local user=${SUDO_USER:-${USER}}
     local -r temp_dir="$(sudo --login --user "${user}" mktemp -d)"
     local jbmnf_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
-    wget --no-check-certificate ${jbmnf_url} -O ${temp_dir}/$(basename ${jbmnf_url})
+    wget --no-check-certificate ${jbmnf_url} -O "${temp_dir}"/"$(basename ${jbmnf_url})"
     sudo --login --user "${user}" mkdir -p /home/"${user}"/.local/share/fonts
-    sudo --login --user "${user}" unzip -o ${temp_dir}/$(basename ${jbmnf_url}) -d /home/"${user}"/.local/share/fonts
+    sudo --login --user "${user}" unzip -o "${temp_dir}"/"$(basename ${jbmnf_url})" -d /home/"${user}"/.local/share/fonts
     sudo --login --user "${user}" fc-cache
 }
 
 function install_viber() {
     local viber_deb_url="https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb"
     local -r temp_dir="$(mktemp -d)"
-    wget --no-check-certificate ${viber_deb_url} -O ${temp_dir}/$(basename ${viber_deb_url})
-    apt install --no-install-suggests --no-install-recommends ${VIBER_DEPENDENCIES[*]} --yes
-    dpkg -i ${temp_dir}/viber.deb
+    wget --no-check-certificate ${viber_deb_url} -O "${temp_dir}"/"$(basename ${viber_deb_url})"
+    apt install --no-install-suggests --no-install-recommends "${VIBER_DEPENDENCIES[@]}" --yes
+    dpkg -i "${temp_dir}"/viber.deb
 }
 
 function install_yazi() {
     local yazi_zip_url="https://github.com/sxyazi/yazi/releases/download/v25.5.31/yazi-${ARCH}-unknown-linux-musl.zip"
     local -r temp_dir="$(mktemp -d)"
-    wget --no-check-certificate ${yazi_zip_url} -O ${temp_dir}/$(basename ${yazi_zip_url})
-    unzip ${temp_dir}/$(basename ${yazi_zip_url}) -d ${temp_dir}
-    for bin in $(find ${temp_dir} -name "yazi" -o -name "ya"); do
-        cp -v ${bin} /usr/local/bin
+    wget --no-check-certificate "${yazi_zip_url}" -O "${temp_dir}"/"$(basename "${yazi_zip_url}")"
+    unzip "${temp_dir}"/"$(basename "${yazi_zip_url}")" -d "${temp_dir}"
+    for bin in $(find "${temp_dir}" -name "yazi" -o -name "ya"); do
+        cp -v "${bin}" /usr/local/bin
     done
 }
 
@@ -503,7 +503,7 @@ fi
 
 if ${INSTALL_DESKTOP}; then
     install_desktop "${DESKTOP}"
-    set_cpu_governor
+    set_cpu_governor "$@"
     disable_bluetooth_autoenable
 fi
 
