@@ -283,7 +283,7 @@ function install_ly() {
     apt install build-essential libpam0g-dev libxcb-xkb-dev --yes
     wget -q --no-check-certificate https://ziglang.org/builds/"${zig_archive}"
     tar xJf "${zig_archive}"
-    git clone ${ly_url}
+    git clone --verbose ${ly_url}
     cd "${tempdir}"/ly || exit
     git checkout v1.0.0
     "${tempdir}"/"${zig_version}"/zig build installsystemd
@@ -295,6 +295,15 @@ function install_ly() {
 function install_pfetch() {
     wget -q --no-check-certificate https://github.com/dylanaraps/pfetch/raw/master/pfetch -O /usr/local/bin/pfetch
     chmod +x /usr/local/bin/pfetch
+}
+
+function install_lolcat() {
+    local lolcat_url="https://github.com/jaseg/lolcat.git"
+    local lolcat_dir="$(mktemp -d)"
+    git clone --verbose ${lolcat_url} ${lolcat_dir}
+    cd ${lolcat_dir} || exit
+    make -j$(nproc) && make -j$(nproc) install
+    rm -rf ${lolcat_dir}
 }
 
 function install_neovim() {
@@ -339,7 +348,7 @@ function install_keyd() {
     local user=${SUDO_USER:-${USER}}
     git -C "${temp_dir}" clone https://github.com/rvaiya/keyd
     cd "${temp_dir}/keyd" || exit
-    make && make install
+    make -j$(nproc) && make -j$(nproc) install
     stow --dir=/home/"${user}"/.dotfiles --target=/ keyd
     systemctl enable keyd && systemctl start keyd
     rm -rf "${temp_dir}"
@@ -425,6 +434,7 @@ INSTALL_LY=false
 INSTALL_VIBER=false
 INSTALL_FONTS=false
 INSTALL_YAZI=false
+INSTALL_LOLCAT=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
@@ -465,6 +475,9 @@ while [ $# -gt 0 ]; do
         ;;
     --yazi)
         INSTALL_YAZI=true
+        ;;
+    --lolcat)
+        INSTALL_LOLCAT=true
         ;;
     -h | --help)
         echo "${HELP}"
@@ -516,3 +529,4 @@ ${INSTALL_LY} && install_ly
 ${INSTALL_VIBER} && install_viber
 ${INSTALL_FONTS} && install_fonts
 ${INSTALL_YAZI} && install_yazi
+${INSTALL_LOLCAT} && install_lolcat

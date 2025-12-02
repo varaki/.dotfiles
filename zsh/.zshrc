@@ -1,3 +1,50 @@
+# Compile sourced files to load them faster
+zsource() {
+  local file=$1
+  local zwc="${file}.zwc"
+  if [[ -f "$file" && (! -f "$zwc" || "$file" -nt "$file") ]]; then
+    zcompile "$file"
+  fi
+  source "$file"
+}
+
+# Encrypt and decrypt with openssl
+crypt() {
+    while [ "$#" -gt 1 ]; do
+        case "$1" in
+            "encrypt")
+                shift
+                infile="$1"
+                openssl enc -aes-256-cbc -pbkdf2 -salt -in "${infile}" -out "${infile}.enc"
+                break
+            ;;
+            "decrypt")
+                shift
+                infile="$1"
+                outfile="$(echo ${infile} | sed 's/\.enc$//g')"
+                openssl enc -aes-256-cbc -pbkdf2 -d -in "${infile}" -out "${outfile}"
+                break
+            ;;
+        esac
+    done
+}
+alias encrypt="crypt encrypt $*"
+alias decrypt="crypt decrypt $*"
+
+# Send keys to tmux with delay
+delayed_send_keys() {
+    local keys=${*}
+    local delay=0.75
+    sleep "${delay}"
+
+    # Separate "Enter" from the keys as it is not getting interpreted otherwise
+    if [[ ${keys} == *"Enter" ]]; then
+        tmux send-keys "${keys// Enter/}" Enter
+    else
+        tmux send-keys ${keys}
+    fi
+}
+
 # Export machine hostname
 export MACHINE="$(uname -n)"
 
@@ -29,7 +76,7 @@ if [[ ! -d "${HOME}/.asdf" || -z "$(ls -A ${HOME}/.asdf)" ]]; then
     git clone https://github.com/asdf-vm/asdf.git ${HOME}/.asdf --branch v0.14.0
     install_asdf_plugins=true
 fi
-source ${HOME}/.asdf/asdf.sh
+zsource ${HOME}/.asdf/asdf.sh
 
 # Install asdf plugins
 if [[ ! -z ${install_asdf_plugins} ]] && [[ -e ${HOME}/.tool-versions ]]; then
@@ -125,7 +172,7 @@ export RANGER_LOAD_DEFAULT_RC="FALSE"
 export RIPGREP_CONFIG_PATH="${HOME}/.config/ripgrep/config"
 
 # Setup fzf and fd
-[ -e ${HOME}/.fzf-key-bindings.zsh ] && source ${HOME}/.fzf-key-bindings.zsh
+[ -e ${HOME}/.fzf-key-bindings.zsh ] && zsource ${HOME}/.fzf-key-bindings.zsh
 export FZF_DEFAULT_COMMAND="fd --unrestricted"
 export FZF_CTRL_T_COMMAND="fd --unrestricted"
 export FZF_ALT_C_COMMAND="fd --unrestricted --type d"
@@ -165,50 +212,15 @@ alias cleardlogs="sudo sh -c 'truncate -s 0 /var/lib/docker/containers/*/*-json.
 # Prevent screen to turn off while playing media with mpv in case of gnome
 [[ "$XDG_SESSION_DESKTOP" == "gnome" ]] && alias mpv="gnome-session-inhibit mpv"
 
-[ -e ${HOME}/.zshrc-otp-auth ] && source ${HOME}/.zshrc-otp-auth
-
-# Encrypt and decrypt with openssl
-crypt() {
-    while [ "$#" -gt 1 ]; do
-        case "$1" in
-            "encrypt")
-                shift
-                infile="$1"
-                openssl enc -aes-256-cbc -pbkdf2 -salt -in "${infile}" -out "${infile}.enc"
-                break
-            ;;
-            "decrypt")
-                shift
-                infile="$1"
-                outfile="$(echo ${infile} | sed 's/\.enc$//g')"
-                openssl enc -aes-256-cbc -pbkdf2 -d -in "${infile}" -out "${outfile}"
-                break
-            ;;
-        esac
-    done
-}
-alias encrypt="crypt encrypt $*"
-alias decrypt="crypt decrypt $*"
-
-# Send keys to tmux with delay
-delayed_send_keys() {
-    local keys=${*}
-    local delay=0.75
-    sleep "${delay}"
-
-    # Separate "Enter" from the keys as it is not getting interpreted otherwise
-    if [[ ${keys} == *"Enter" ]]; then
-        tmux send-keys "${keys// Enter/}" Enter
-    else
-        tmux send-keys ${keys}
-    fi
-}
+[ -e ${HOME}/.zshrc-otp-auth ] && zsource ${HOME}/.zshrc-otp-auth
 
 # Bash-like word deletion
 autoload -U select-word-style; select-word-style bash
 
 # Setup autocompletion
-autoload -U compinit; compinit
+autoload -Uz compinit
+ZSH_COMPDUMP="${ZSH}/.zcompdump"
+compinit -C -d "$ZSH_COMPDUMP"
 zstyle ':completion:*' special-dirs false
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
@@ -241,9 +253,9 @@ done
 
 # Setup plugins
 fpath=(${ZSH_PLUGINS_DIR}/zsh-completions/src $fpath)
-source ${ZSH_PLUGINS_DIR}/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
-source ${ZSH_PLUGINS_DIR}/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-source ${ZSH_PLUGINS_DIR}/sudo/sudo.plugin.zsh
+zsource ${ZSH_PLUGINS_DIR}/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
+zsource ${ZSH_PLUGINS_DIR}/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+zsource ${ZSH_PLUGINS_DIR}/sudo/sudo.plugin.zsh
 
 # Override default comment styling (requires zsh-syntax-highlighting)
 ZSH_HIGHLIGHT_STYLES[comment]='fg=008,bold'
@@ -267,19 +279,19 @@ case "${PRODUCT}" in
         work_env=true
         ;;
 esac
-${work_env} && [ -e ${HOME}/.zshrc-work ] && source ${HOME}/.zshrc-work
+${work_env} && [ -e ${HOME}/.zshrc-work ] && zsource ${HOME}/.zshrc-work
 
 # Source server zsh config
 if [[ "${MACHINE}" == "sero"* ]]; then
-    [ -e ${HOME}/.zshrc-work-sero ] && source ${HOME}/.zshrc-work-sero
+    [ -e ${HOME}/.zshrc-work-sero ] && zsource ${HOME}/.zshrc-work-sero
 fi
 
 # Run pfetch
 if command -v lolcat >& /dev/null; then
     pfetch | lolcat \
-        --force \
-        --truecolor \
-        --seed 55
+        --force-color \
+        --24bit \
+        --seed 10
 else
     pfetch
 fi

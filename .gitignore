@@ -3,3 +3,5 @@ zsh/.zshrc-otp-auth
 zsh/.zshrc-work
 zsh/.zshrc-work-sero
 zsh/.config/zsh/plugins/
+zsh/.zcompdump
+*.zwc
