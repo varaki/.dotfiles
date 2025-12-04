@@ -378,6 +378,7 @@ function stow_configs() {
         if [ "${config}" == "zsh" ]; then
             local -r curr_lang=$(locale | grep LANG= | cut -d'=' -f2)
             sudo --login --user "${user}" sed -i 's%en_US.UTF-8%'"${curr_lang}"'%g' /home/"${user}"/.zshrc
+            zcompile /home/${user}/.zshrc >&/dev/null || true
         fi
     done
 }
