@@ -2,7 +2,7 @@
 zsource() {
   local file=$1
   local zwc="${file}.zwc"
-  if [[ -f "$file" && (! -f "$zwc" || "$file" -nt "$file") ]]; then
+  if [[ -f "$file" && (! -f "$zwc" || "$file" -nt "$zwc") ]]; then
     zcompile "$file"
   fi
   source "$file"
@@ -34,7 +34,7 @@ alias decrypt="crypt decrypt $*"
 # Send keys to tmux with delay
 delayed_send_keys() {
     local keys=${*}
-    local delay=0.75
+    local delay=0.25
     sleep "${delay}"
 
     # Separate "Enter" from the keys as it is not getting interpreted otherwise
