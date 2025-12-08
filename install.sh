@@ -32,6 +32,7 @@ BASE=(
     "exfatprogs"
     "fd-find"
     "ffmpeg"
+    "fonts-inter"
     "fonts-recommended"
     "fuse"
     "fzf"
