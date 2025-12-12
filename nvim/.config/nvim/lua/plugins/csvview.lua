@@ -23,4 +23,15 @@ return {
     },
   },
   cmd = { "CsvViewEnable", "CsvViewDisable", "CsvViewToggle" },
+  ft = "csv",
+  config = function(_, opts)
+    require("csvview").setup(opts)
+    -- Auto-enable CSV view when opening CSV files
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "csv",
+      callback = function()
+        vim.cmd("CsvViewEnable")
+      end,
+    })
+  end,
 }
