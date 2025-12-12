@@ -5,3 +5,4 @@ zsh/.zshrc-work-sero
 zsh/.config/zsh/plugins/
 zsh/.zcompdump
 *.zwc
+*.log
