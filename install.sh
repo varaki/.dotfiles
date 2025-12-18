@@ -82,7 +82,7 @@ Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
         "o=Debian Backports,n=${distro_codename}-backports,l=Debian Backports";
         // Mozilla
-        "o=namespaces/moz-fx-productdelivery-pr-38b5/repositories/mozilla,a=mozilla,n=mozilla,l=namespaces/moz-fx-productdelivery-pr-38b5/repositories/mozilla,c=main"
+        "origin=namespaces/moz-fx-productdelivery-pr-38b5/repositories/mozilla";
         // Spotify
         "o=Spotify LTD,a=stable,n=stable,l=Spotify Public Repository,c=non-free"
 };
