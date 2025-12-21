@@ -21,6 +21,11 @@ return {
       jump_next_row = { "<Enter>", mode = { "n", "v" } },
       jump_prev_row = { "<S-Enter>", mode = { "n", "v" } },
     },
+    sticky_header = {
+      --- Whether to enable the sticky header feature
+      --- @type boolean
+      enabled = true,
+    },
   },
   cmd = { "CsvViewEnable", "CsvViewDisable", "CsvViewToggle" },
   ft = "csv",
