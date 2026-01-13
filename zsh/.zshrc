@@ -161,8 +161,8 @@ bindkey "^Xa" _expand_alias
 bindkey -e
 
 # Set up correct terminal-overrides in tmux.conf
-if [[ -z ${TMUX} ]] && [[ -f ~/.tmux.conf ]]; then
-    grep -qE "^set-option -ga terminal-overrides.*${TERM}" ~/.tmux.conf || sed --follow-symlinks -i 's%\(^set-option -ga terminal-overrides\).*%\1 ",'${TERM}':RGB"%g' ~/.tmux.conf
+if [[ -z ${TMUX} ]] && [[ -f ${HOME}/.tmux.conf ]]; then
+    grep -qE "^set-option -ga terminal-overrides.*${TERM}" ${HOME}/.tmux.conf || sed --follow-symlinks -i 's%\(^set-option -ga terminal-overrides\).*%\1 ",'${TERM}':RGB"%g' ${HOME}/.tmux.conf
 fi
 
 # Disable loading default ranger config
