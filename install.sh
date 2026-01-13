@@ -7,14 +7,19 @@ Usage:
 
 Options:
     --base                  Install base packages
-    --unattended-upgrades   Set up unattended-upgrades
-    --ssh                   Configure ssh
+    --desktop DESKTOP       Install desktop packages [GNOME, XFCE]
+    --fonts                 Install nerd fonts
     --keyd                  Install keyd (custom keyboard layout daemon)
-    --neovim                Install neovim
-    --desktop DESKTOP       Install desktop packages
-    --systemd-boot          Install systemd-boot
+    --lolcat                Install lolcat
     --ly                    Install ly login manager
+    --neovim                Install neovim
+    --pro-audio             Install pro-audio packages
+    --ssh                   Configure ssh
+    --systemd-boot          Install systemd-boot
+    --unattended-upgrades   Set up unattended-upgrades
+    --viber                 Install viber
     --yazi                  Install yazi file manager
+
 EOF
 )
 
@@ -226,16 +231,16 @@ function install_desktop() {
     local user=${SUDO_USER:-${USER}}
     local desktop=${1:-XFCE}
     case ${desktop^^} in
-    "XFCE")
-        packages=${XFCE[*]}
-        ;;
-    "GNOME")
-        packages=${GNOME[*]}
-        ;;
-    *)
-        echo "Unknown destkop: ${desktop}"
-        exit 1
-        ;;
+        "XFCE")
+            packages=${XFCE[*]}
+            ;;
+        "GNOME")
+            packages=${GNOME[*]}
+            ;;
+        *)
+            echo "Unknown destkop: ${desktop}"
+            exit 1
+            ;;
     esac
     echo "Installing ${desktop} packages..."
     install_packages "${packages[*]}"
@@ -243,16 +248,16 @@ function install_desktop() {
     install_fonts
 
     case "${desktop}" in
-    "XFCE")
-        local imvbin="/usr/bin/imv-x11"
-        ;;
-    "GNOME")
-        local imvbin="/usr/bin/imv-wayland"
-        apt purge --autoremove plymouth --yes
-        systemctl disable --now NetworkManager-wait-online ModemManager
-        # Disable gnome-tracker
-        echo "Run systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask"
-        ;;
+        "XFCE")
+            local imvbin="/usr/bin/imv-x11"
+            ;;
+        "GNOME")
+            local imvbin="/usr/bin/imv-wayland"
+            apt purge --autoremove plymouth --yes
+            systemctl disable --now NetworkManager-wait-online ModemManager
+            # Disable gnome-tracker
+            echo "Run systemctl --user list-unit-files | grep tracker | awk '{ print $1 }' | xargs -n1 systemctl --user mask"
+            ;;
     esac
     if [ -n "${imvbin}" ]; then
         ln -s "${imvbin}" /usr/bin/imv
@@ -440,56 +445,56 @@ INSTALL_LOLCAT=false
 
 while [ $# -gt 0 ]; do
     case ${1} in
-    --base)
-        INSTALL_BASE=true
-        ;;
-    --unattended-upgrades)
-        INSTALL_UNATTENDED_UPGRADES=true
-        ;;
-    --desktop)
-        INSTALL_DESKTOP=true
-        shift
-        DESKTOP=${1}
-        ;;
-    --pro-audio)
-        INSTALL_PRO_AUDIO=true
-        ;;
-    --keyd)
-        INSTALL_KEYD=true
-        ;;
-    --neovim)
-        INSTALL_NEOVIM=true
-        ;;
-    --ssh)
-        INSTALL_SSH=true
-        ;;
-    --systemd-boot)
-        INSTALL_SYSTEMDBOOT=true
-        ;;
-    --ly)
-        INSTALL_LY=true
-        ;;
-    --viber)
-        INSTALL_VIBER=true
-        ;;
-    --fonts)
-        INSTALL_FONTS=true
-        ;;
-    --yazi)
-        INSTALL_YAZI=true
-        ;;
-    --lolcat)
-        INSTALL_LOLCAT=true
-        ;;
-    -h | --help)
-        echo "${HELP}"
-        exit
-        ;;
-    *)
-        echo "Unkown option: ${1}"
-        echo "${HELP}"
-        exit 1
-        ;;
+        --base)
+            INSTALL_BASE=true
+            ;;
+        --unattended-upgrades)
+            INSTALL_UNATTENDED_UPGRADES=true
+            ;;
+        --desktop)
+            INSTALL_DESKTOP=true
+            shift
+            DESKTOP=${1}
+            ;;
+        --pro-audio)
+            INSTALL_PRO_AUDIO=true
+            ;;
+        --keyd)
+            INSTALL_KEYD=true
+            ;;
+        --neovim)
+            INSTALL_NEOVIM=true
+            ;;
+        --ssh)
+            INSTALL_SSH=true
+            ;;
+        --systemd-boot)
+            INSTALL_SYSTEMDBOOT=true
+            ;;
+        --ly)
+            INSTALL_LY=true
+            ;;
+        --viber)
+            INSTALL_VIBER=true
+            ;;
+        --fonts)
+            INSTALL_FONTS=true
+            ;;
+        --yazi)
+            INSTALL_YAZI=true
+            ;;
+        --lolcat)
+            INSTALL_LOLCAT=true
+            ;;
+        -h | --help)
+            echo "${HELP}"
+            exit
+            ;;
+        *)
+            echo "Unkown option: ${1}"
+            echo "${HELP}"
+            exit 1
+            ;;
     esac
     shift
 done
