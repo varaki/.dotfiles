@@ -1,0 +1,13 @@
+[/]
+hot-sensors=['__network-rx_max__', '__network-tx_max__']
+icon-style=1
+show-fan=false
+show-memory=false
+show-network=true
+show-processor=false
+show-storage=false
+show-system=false
+show-temperature=false
+show-voltage=false
+update-time=2
+use-higher-precision=false

@@ -1,0 +1,10 @@
+[/]
+cache-size=100
+history-size=100
+move-item-first=true
+paste-button=false
+show-pin-button=true
+show-preview-button=true
+show-tag-button=false
+strip-text=true
+toggle-menu=['<Super>c']
