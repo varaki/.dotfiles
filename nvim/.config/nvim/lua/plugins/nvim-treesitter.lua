@@ -1,7 +1,12 @@
 return {
   "nvim-treesitter/nvim-treesitter",
+  -- Pin to the legacy `master` branch. The new default `main` branch is a full,
+  -- incompatible rewrite that removed the `nvim-treesitter.configs` module and
+  -- the `.setup()` API used below, and it requires Neovim 0.12+ (nightly).
+  -- `master` is locked but kept for backward compatibility with Neovim 0.11.
+  branch = "master",
   dependencies = {
-    "nvim-treesitter/nvim-treesitter-textobjects",
+    { "nvim-treesitter/nvim-treesitter-textobjects", branch = "master" },
   },
   build = ":TSUpdate",
   config = function()
@@ -28,7 +33,6 @@ return {
           "jsdoc",
           "json",
           "json5",
-          "jsonc",
           "jsonnet",
           "kotlin",
           "lua",

@@ -27,7 +27,7 @@ return {
       dockerls = {},
 
       -- go
-      gopls = {},
+      -- gopls = {},
 
       -- html
       html = {},
