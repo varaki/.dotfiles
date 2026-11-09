@@ -189,7 +189,7 @@ function install_packages() {
     for pkg in "${pkgs[@]}"; do
         echo "- ${pkg}"
     done
-    apt install --no-install-suggests "${pkgs[@]}" --yes
+    apt install --no-install-suggests ${pkgs[@]} --yes
 }
 
 function install_unattended_upgrades() {
