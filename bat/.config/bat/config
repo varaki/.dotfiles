@@ -1,0 +1,5 @@
+# -p  => plain style (no line numbers, grid, headers, or other decorations)
+--style="plain"
+
+# -P  => never use the pager; write output directly to stdout
+--paging="never"
