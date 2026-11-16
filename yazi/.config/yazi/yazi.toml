@@ -51,6 +51,12 @@ extract = [
     { run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
     { run = 'ya pub extract --list %*', desc = "Extract here", for = "windows" },
 ]
+image = [
+    { run = 'imv-dir "$@"', orphan = true, desc = "imv-dir", for = "unix" },
+]
+pdf = [
+    { run = 'zathura "$@"', orphan = true, desc = "zathura", for = "unix" },
+]
 play = [
     { run = 'mpv --force-window "$@"', orphan = true, for = "unix" },
     { run = 'mpv --force-window %*', orphan = true, for = "windows" },
@@ -72,6 +78,13 @@ rules = [
     ] },
     # Image
     { mime = "image/*", use = [
+        "image",
+        "open",
+        "reveal",
+    ] },
+    # PDF
+    { mime = "application/pdf", use = [
+        "pdf",
         "open",
         "reveal",
     ] },

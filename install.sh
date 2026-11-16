@@ -30,7 +30,6 @@ NEOVIM_DESKTOP_XZ_ARCHIVE="/Td6WFoAAATm1rRGBMCQGoCgASEBFgAAAAAAAHoeOfTgT/8NCF0AO
 declare -a BASE
 BASE=(
     "7zip"
-    "alacritty"
     "build-essential"
     "curl"
     "dosfstools"
@@ -48,6 +47,7 @@ BASE=(
     "imagemagick"
     "jq"
     "kbd"
+    "kitty"
     "locales"
     "pigz"
     "poppler-utils"
@@ -370,9 +370,9 @@ function stow_configs() {
 
     declare -a configs
     configs=(
-        "alacritty"
         "git"
         "htop"
+        "kitty"
         "nvim"
         "ripgrep"
         "tmux"
@@ -509,7 +509,6 @@ if ${INSTALL_BASE}; then
     apt purge --autoremove apt-listchanges --yes
     install_packages "${BASE[*]}"
     command -v fd || ln -s "$(command -v fdfind)" "$(dirname "$(command -v fdfind)")/fd"
-    curl -sSL https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info | tic -x - # Set terminal info for alacritty
     install_pfetch
     install_neovim && INSTALL_NEOVIM=false
     install_yazi && INSTALL_YAZI=false
